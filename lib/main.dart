@@ -11,6 +11,7 @@ class basic extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
         leading: IconButton(
           onPressed: () {
             print('You opened the side menu!');
@@ -19,20 +20,69 @@ class basic extends StatelessWidget {
             Icons.menu,
           ),
         ),
-        title: Text("PiratePlus"),
+
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Pirate "),
+            Image.asset(
+              "images/WhitworthUniversity-logo.png",
+              height: 30,
+            ),
+            Text(" Plus"),
+          ],
+        ),
         centerTitle: true,
         backgroundColor: Colors.red[700],
+
+        actions: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                  "User"
+              ),
+              Text(
+                  " Name"
+              ),
+            ]
+          ),
+          IconButton(
+              onPressed: () {print("Go edit user settings");},
+              icon: Icon(
+                  Icons.person,
+              ),
+          ),
+        ],
       ),
+
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
-        color: Colors.redAccent[100],
+        padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+        color: Colors.grey[300],
         child: Column (
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Column(
                   children: [
 
-                    Image.asset('images/IMG_20181006_204914.jpg'),
+                    Container(
+                      color: Colors.red[700],
+                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                      child: Text(
+                          '*Inspirational Quote*',
+                          style: TextStyle(
+                            fontFamily: 'Questrial',
+                            fontSize: 25,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.white,
+                          ),
+                      ),
+                    ),
+
+                    Image.asset(
+                      'images/ExampleSelfie.jpg',
+                      height: 500,
+                    ),
 
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -49,66 +99,79 @@ class basic extends StatelessWidget {
                           ),
                         ]
                     ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 20),
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                      color: Colors.blueGrey[200],
-                      child: Text('This is an upcoming event or something'),
+                    FractionallySizedBox(
+                      widthFactor: 1,
+                      child: Center(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(vertical: 20),
+                          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                          color: Colors.red[600],
+                          child: Text(
+                            '*Upcoming event*',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      MaterialButton(
-                        onPressed: () {
-                          print('Go get a ride');
-                        },
-                        child: Text(
-                          'Rideshare',
-                          style: TextStyle(
-                            color: Colors.white,
+                Container(
+                  color: Colors.red[700],
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MaterialButton(
+                          onPressed: () {
+                            print('Go get a ride');
+                          },
+                          child: Text(
+                            'Rideshare',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
+                          color: Colors.red[700],
                         ),
-                        color: Colors.red[700],
-                      ),
-                      MaterialButton(
-                        onPressed: () {
-                          print('See your favorite events');
-                        },
-                        child: Text(
-                          'Events',
-                          style: TextStyle(
-                            color: Colors.white,
+                        MaterialButton(
+                          onPressed: () {
+                            print('See your favorite events');
+                          },
+                          child: Text(
+                            'Events',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
+                          color: Colors.grey,
                         ),
-                        color: Colors.grey,
-                      ),
-                      MaterialButton(
-                        onPressed: () {
-                          print('Food recommendations');
-                        },
-                        child: Text(
-                          'Food',
-                          style: TextStyle(
-                            color: Colors.white,
+                        MaterialButton(
+                          onPressed: () {
+                            print('Food recommendations');
+                          },
+                          child: Text(
+                            'Food',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
+                          color: Colors.red[700],
                         ),
-                        color: Colors.red[700],
-                      ),
-                      MaterialButton(
-                        onPressed: () {
-                          print('Check in on yourself');
-                        },
-                        child: Text(
-                          'Mental Health',
-                          style: TextStyle(
-                            color: Colors.white,
+                        MaterialButton(
+                          onPressed: () {
+                            print('Check in on yourself');
+                          },
+                          child: Text(
+                            'Mental Health',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
+                          color: Colors.grey,
                         ),
-                        color: Colors.grey,
-                      ),
-                    ]
+                      ]
+                  ),
                 ),
               ]
           ),
