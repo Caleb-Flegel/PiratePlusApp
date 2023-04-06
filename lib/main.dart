@@ -104,8 +104,8 @@ class _basicState extends State<basic> {
                 },
                 child: Column(
                   children: [
-                    Icon(Icons.emoji_emotions,
-                      color: Colors.yellowAccent,
+                    Icon(Icons.emoji_emotions_outlined,
+                      color: Colors.yellow,
                       size: 120.0,
                     ),
                     Text('Happy'),
