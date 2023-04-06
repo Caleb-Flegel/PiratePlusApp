@@ -1,11 +1,33 @@
 import 'package:flutter/material.dart';
+import 'models/mysql.dart';
 
 void main() => runApp(MaterialApp(
     home: basic(),
 ));
 
-class basic extends StatelessWidget {
+class basic extends StatefulWidget {
   const basic({Key? key}) : super(key: key);
+
+  @override
+  State<basic> createState() => _basicState();
+}
+
+class _basicState extends State<basic> {
+
+  var db = mySql();
+
+  void storeReports(emotion){
+    db.getConnection().then((conn) {
+      String sql = 'Insert into mhreports (`emotion`, `userUid`) ';
+      sql += 'values (?, 1)';
+      conn.query(sql, [emotion]).then((results) {
+        for(var row in results) {
+          print("Reported: " + row[1]);
+        }
+      });
+    });
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -56,125 +78,142 @@ class basic extends StatelessWidget {
         ],
       ),
 
-      body: Container(
-        padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-        color: Colors.grey[300],
-        child: Column (
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: (){
+                  storeReports('Relaxed');
+                },
+                child: Column(
                   children: [
-
-                    Container(
-                      color: Colors.red[700],
-                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                      child: Text(
-                          '*Inspirational Quote*',
-                          style: TextStyle(
-                            fontFamily: 'Questrial',
-                            fontSize: 25,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.white,
-                          ),
-                      ),
+                    Icon(Icons.brightness_low_outlined,
+                      color: Colors.amber,
+                      size: 120.0, 
                     ),
-
-                    Image.asset(
-                      'images/ExampleSelfie.jpg',
-                      height: 500,
+                    Text('Relaxed'),
+                  ]
+                ),
+              ),
+              TextButton(
+                onPressed: (){
+                  storeReports('Happy');
+                },
+                child: Column(
+                  children: [
+                    Icon(Icons.emoji_emotions,
+                      color: Colors.yellowAccent,
+                      size: 120.0,
                     ),
-
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text (
-                            '*Date Taken*',
-                            style: TextStyle(
-                              fontFamily: 'Questrial',
-                              fontSize: 25.0,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 2,
-                              color: Colors.red[700],
-                            ),
-                          ),
-                        ]
+                    Text('Happy'),
+                  ]
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  storeReports('Excited');
+                }, 
+                child: Column(
+                  children: [
+                    Icon(Icons.emoji_nature_outlined,
+                      color: Colors.lime,
+                      size: 120.0,
                     ),
-                    FractionallySizedBox(
-                      widthFactor: 1,
-                      child: Center(
-                        child: Container(
-                          margin: EdgeInsets.symmetric(vertical: 20),
-                          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                          color: Colors.red[600],
-                          child: Text(
-                            '*Upcoming event*',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    Text('Excited'),
                   ],
                 ),
-                Container(
-                  color: Colors.red[700],
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MaterialButton(
-                          onPressed: () {
-                            print('Go get a ride');
-                          },
-                          child: Text(
-                            'Rideshare',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          color: Colors.red[700],
-                        ),
-                        MaterialButton(
-                          onPressed: () {
-                            print('See your favorite events');
-                          },
-                          child: Text(
-                            'Events',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          color: Colors.grey,
-                        ),
-                        MaterialButton(
-                          onPressed: () {
-                            print('Food recommendations');
-                          },
-                          child: Text(
-                            'Food',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          color: Colors.red[700],
-                        ),
-                        MaterialButton(
-                          onPressed: () {
-                            print('Check in on yourself');
-                          },
-                          child: Text(
-                            'Mental Health',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          color: Colors.grey,
-                        ),
-                      ]
-                  ),
-                ),
-              ]
+              )
+            ],
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: (){
+                  storeReports('Drained');
+                },
+                child: Column(
+                  children: [
+                    Icon(Icons.battery_1_bar_outlined,
+                      color: Colors.blueGrey,
+                      size: 120.0,
+                    ),
+                    Text('Drained'),
+                  ]
+                ),
+              ),
+              TextButton(
+                onPressed: (){
+                  storeReports('Neutral');
+                },
+                child: Column(
+                  children: [
+                    Icon(Icons.thumbs_up_down_outlined,
+                      size: 120.0,
+                    ),
+                    Text('Neutral'),
+                  ]
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  storeReports('Stressed');
+                }, 
+                child: Column(
+                  children: [
+                    Icon(Icons.alarm_add_outlined,
+                      size: 120.0
+                    ),
+                    Text('Stressed'),
+                  ],
+                ),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: (){
+                  storeReports('Depressed');
+                },
+                child: Column(
+                  children: [
+                    Icon(Icons.anchor_outlined,
+                      size: 120.0
+                    ),
+                    Text('Depressed'),
+                  ]
+                ),
+              ),
+              TextButton(
+                onPressed: (){},
+                child: Column(
+                  children: [
+                    Icon(Icons.mood_bad_outlined,
+                      size: 120.0
+                    ),
+                    Text('Sad'),
+                  ]
+                ),
+              ),
+              TextButton(
+                onPressed: () {}, 
+                child: Column(
+                  children: [
+                    Icon(Icons.volcano_outlined,
+                      size: 120.0,
+                    ),
+                    Text('Angry'),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }
