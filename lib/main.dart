@@ -94,7 +94,9 @@ class _basicState extends State<basic> {
                       color: Colors.amber,
                       size: 120.0, 
                     ),
-                    Text('Relaxed'),
+                    Text('Relaxed',
+                      style: TextStyle (fontSize: 24.0),
+                      ),
                   ]
                 ),
               ),
@@ -108,7 +110,9 @@ class _basicState extends State<basic> {
                       color: Colors.yellow,
                       size: 120.0,
                     ),
-                    Text('Happy'),
+                    Text('Happy',
+                      style: TextStyle(fontSize: 24.0),
+                    ),
                   ]
                 ),
               ),
@@ -122,7 +126,9 @@ class _basicState extends State<basic> {
                       color: Colors.lime,
                       size: 120.0,
                     ),
-                    Text('Excited'),
+                    Text('Excited',
+                      style: TextStyle(fontSize: 24.0),
+                    ),
                   ],
                 ),
               )
@@ -141,7 +147,9 @@ class _basicState extends State<basic> {
                       color: Colors.blueGrey,
                       size: 120.0,
                     ),
-                    Text('Drained'),
+                    Text('Drained',
+                      style: TextStyle(fontSize: 24.0),
+                    ),
                   ]
                 ),
               ),
@@ -155,7 +163,9 @@ class _basicState extends State<basic> {
                       color: Colors.grey,
                       size: 120.0,
                     ),
-                    Text('Neutral'),
+                    Text('Neutral',
+                      style: TextStyle(fontSize: 24.0),
+                    ),
                   ]
                 ),
               ),
@@ -169,7 +179,9 @@ class _basicState extends State<basic> {
                       color: Colors.indigoAccent,
                       size: 120.0
                     ),
-                    Text('Stressed'),
+                    Text('Stressed',
+                      style: TextStyle(fontSize: 24.0),
+                    ),
                   ],
                 ),
               )
@@ -188,7 +200,9 @@ class _basicState extends State<basic> {
                       color: Colors.teal,
                       size: 120.0
                     ),
-                    Text('Depressed'),
+                    Text('Depressed',
+                      style: TextStyle(fontSize: 24.0),
+                    ),
                   ]
                 ),
               ),
@@ -200,7 +214,9 @@ class _basicState extends State<basic> {
                       color: Colors.cyan,
                       size: 120.0,
                     ),
-                    Text('Sad'),
+                    Text('Sad',
+                      style: TextStyle(fontSize: 24.0),
+                    ),
                   ]
                 ),
               ),
@@ -212,7 +228,9 @@ class _basicState extends State<basic> {
                       color: Colors.redAccent,
                       size: 120.0,
                     ),
-                    Text('Angry'),
+                    Text('Angry',
+                      style: TextStyle(fontSize: 24.0),
+                    ),
                   ],
                 ),
               )
