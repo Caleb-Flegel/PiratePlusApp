@@ -152,6 +152,7 @@ class _basicState extends State<basic> {
                 child: Column(
                   children: [
                     Icon(Icons.thumbs_up_down_outlined,
+                      color: Colors.grey,
                       size: 120.0,
                     ),
                     Text('Neutral'),
@@ -165,6 +166,7 @@ class _basicState extends State<basic> {
                 child: Column(
                   children: [
                     Icon(Icons.alarm_add_outlined,
+                      color: Colors.indigoAccent,
                       size: 120.0
                     ),
                     Text('Stressed'),
@@ -183,6 +185,7 @@ class _basicState extends State<basic> {
                 child: Column(
                   children: [
                     Icon(Icons.anchor_outlined,
+                      color: Colors.teal,
                       size: 120.0
                     ),
                     Text('Depressed'),
@@ -194,7 +197,8 @@ class _basicState extends State<basic> {
                 child: Column(
                   children: [
                     Icon(Icons.mood_bad_outlined,
-                      size: 120.0
+                      color: Colors.cyan,
+                      size: 120.0,
                     ),
                     Text('Sad'),
                   ]
@@ -205,6 +209,7 @@ class _basicState extends State<basic> {
                 child: Column(
                   children: [
                     Icon(Icons.volcano_outlined,
+                      color: Colors.redAccent,
                       size: 120.0,
                     ),
                     Text('Angry'),
