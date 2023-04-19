@@ -16,7 +16,7 @@ class mySql {
             port: port,
             user: user,
             password: password,
-            db: db
+            db: db,
         );
         return await MySqlConnection.connect(settings);
     }
