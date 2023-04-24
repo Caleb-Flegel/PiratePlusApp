@@ -52,7 +52,13 @@ class _basicState extends State<basic> {
           ],
         ),
         centerTitle: true,
-        backgroundColor: Colors.red[700],
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[Color.fromARGB(255, 106, 229, 198), Colors.cyan.shade700]))
+        ),
         elevation: 0,
         actions: [
           Column(

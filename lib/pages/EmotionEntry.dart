@@ -60,7 +60,14 @@ class _emotionSelectState extends State<emotionSelect> {
           ],
         ),
         centerTitle: true,
-        backgroundColor: Colors.red[700],
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[Color.fromARGB(255, 106, 229, 198), Colors.cyan.shade700]))
+        ),
+        
         elevation: 0,
 
         actions: [
@@ -88,7 +95,7 @@ class _emotionSelectState extends State<emotionSelect> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(
-            "Enter an Emotion:",
+            "How are you feeling?",
             style: TextStyle(fontSize: 36),
           ),
           Row(
@@ -111,8 +118,8 @@ class _emotionSelectState extends State<emotionSelect> {
                         color: Colors.amber,
                         size: 120.0,
                       ),
-                      Text('Relaxed',
-                        style: TextStyle (fontSize: 24.0),
+                      Text('relaxed',
+                        style: TextStyle (fontSize: 24.0, color: Colors.black),
                       ),
                     ]
                 ),
@@ -134,15 +141,15 @@ class _emotionSelectState extends State<emotionSelect> {
                         color: Colors.yellow,
                         size: 120.0,
                       ),
-                      Text('Happy',
-                        style: TextStyle(fontSize: 24.0),
+                      Text('happy',
+                        style: TextStyle(fontSize: 24.0, color: Colors.black),
                       ),
                     ]
                 ),
               ),
               TextButton(
                 onPressed: () async {
-                  curReport.emotion = 'Excited';
+                  curReport.emotion = 'excited';
                   await Navigator.pushNamed(
                       context,
                       Question.routeName,
@@ -157,8 +164,8 @@ class _emotionSelectState extends State<emotionSelect> {
                       color: Colors.lime,
                       size: 120.0,
                     ),
-                    Text('Excited',
-                      style: TextStyle(fontSize: 24.0),
+                    Text('excited',
+                      style: TextStyle(fontSize: 24.0, color: Colors.black),
                     ),
                   ],
                 ),
@@ -170,7 +177,7 @@ class _emotionSelectState extends State<emotionSelect> {
             children: [
               TextButton(
                 onPressed: () async {
-                  curReport.emotion = 'Drained';
+                  curReport.emotion = 'drained';
                   await Navigator.pushNamed(
                       context,
                       Question.routeName,
@@ -185,15 +192,15 @@ class _emotionSelectState extends State<emotionSelect> {
                         color: Colors.blueGrey,
                         size: 120.0,
                       ),
-                      Text('Drained',
-                        style: TextStyle(fontSize: 24.0),
+                      Text('drained',
+                        style: TextStyle(fontSize: 24.0, color: Colors.black),
                       ),
                     ]
                 ),
               ),
               TextButton(
                 onPressed: () async {
-                  curReport.emotion = 'Neutral';
+                  curReport.emotion = 'calm';
                   await Navigator.pushNamed(
                       context,
                       Question.routeName,
@@ -208,8 +215,8 @@ class _emotionSelectState extends State<emotionSelect> {
                         color: Colors.grey,
                         size: 120.0,
                       ),
-                      Text('Neutral',
-                        style: TextStyle(fontSize: 24.0),
+                      Text('calm',
+                        style: TextStyle(fontSize: 24.0, color: Colors.black),
                       ),
                     ]
                 ),
@@ -231,8 +238,8 @@ class _emotionSelectState extends State<emotionSelect> {
                         color: Colors.indigoAccent,
                         size: 120.0
                     ),
-                    Text('Stressed',
-                      style: TextStyle(fontSize: 24.0),
+                    Text('stressed',
+                      style: TextStyle(fontSize: 24.0, color: Colors.black),
                     ),
                   ],
                 ),
@@ -259,8 +266,8 @@ class _emotionSelectState extends State<emotionSelect> {
                           color: Colors.teal,
                           size: 120.0
                       ),
-                      Text('Depressed',
-                        style: TextStyle(fontSize: 24.0),
+                      Text('depressed',
+                        style: TextStyle(fontSize: 24.0, color: Colors.black),
                       ),
                     ]
                 ),
@@ -282,8 +289,8 @@ class _emotionSelectState extends State<emotionSelect> {
                         color: Colors.cyan,
                         size: 120.0,
                       ),
-                      Text('Sad',
-                        style: TextStyle(fontSize: 24.0),
+                      Text('sad',
+                        style: TextStyle(fontSize: 24.0, color: Colors.black),
                       ),
                     ]
                 ),
@@ -305,8 +312,8 @@ class _emotionSelectState extends State<emotionSelect> {
                       color: Colors.redAccent,
                       size: 120.0,
                     ),
-                    Text('Angry',
-                      style: TextStyle(fontSize: 24.0),
+                    Text('angry',
+                      style: TextStyle(fontSize: 24.0, color: Colors.black),
                     ),
                   ],
                 ),
