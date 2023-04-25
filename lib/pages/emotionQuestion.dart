@@ -2,32 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:pirate_plus/pages/GPTEmotionRepsonse.dart';
 import '../Classes/report.dart';
 
-class Question extends StatefulWidget {
-  const Question({Key? key}) : super(key: key);
-  static const routeName = "/report/emotionQuestion";
-  @override
-  State<Question> createState() => _QuestionState();
-}
+class Question extends StatelessWidget {
+  const Question({Key? key, this.curReport}) : super(key: key);
 
-class _QuestionState extends State<Question> {
-  String? temp = 'Loading...';
+  static const routeName = "/report/emotionQuestion";
+  final report? curReport;
 
   @override
   Widget build(BuildContext context) {
-
-    report curReport = ModalRoute.of(context)!.settings.arguments as report;
-    if (curReport.question == null) {
-      curReport.getQuestion().then((value) {
-        setState(() {
-          temp = curReport.question;
-        });
-      });
-    }
-    else {
-      setState(() {
-        temp = curReport.question;
-      });
-    }
+    // if (curReport.question == null) {
+    //   print ("getQuestion");
+    //   curReport.getQuestion().then((value) {
+    //     setState(() {
+    //       print("set temp");
+    //       temp = curReport.question;
+    //       print("1 question, ${curReport.question}");
+    //       print("1 temp, ${temp}");
+    //     });
+    //     print("2 question, ${curReport.question}");
+    //     print("2 temp, ${temp}");
+    //   });
+    // }
+    // else {
+    //   setState(() {
+    //     print("$temp");
+    //     temp = curReport.question;
+    //   });
+    // }
 
     TextEditingController emotionQuestion = TextEditingController();
 
@@ -92,30 +93,37 @@ class _QuestionState extends State<Question> {
               style: TextStyle(fontSize: 16.0)
             ),
             SizedBox(height: 40.0),
-      
-            Text('$temp',
+
+            Text('${curReport?.question}',
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 30.0),
-            
-      
+
+
             TextField(
               controller: emotionQuestion,
               maxLines: null,
               decoration: InputDecoration(
-                
+
                 border: OutlineInputBorder(),
                 hintText: 'Type here...',
               ),
             ),
             SizedBox(height: 100.0),
-      
+
             ElevatedButton(
-              onPressed: () async {
-                curReport.response = emotionQuestion.text;
+              onPressed: (){
+                print(curReport?.question);
+              },
+              child: Text("see curResport"),
+          ),
+
+          ElevatedButton(
+            onPressed: () async {
+              curReport?.response = emotionQuestion.text;
                 await Navigator.pushNamed(
                     context,
                     gptResponse.routeName,

@@ -18,29 +18,13 @@ class _emotionSelectState extends State<emotionSelect> {
 
   String recentResult = '';
 
-  getRecentResult(){
-    db.getConnection().then((conn) {
-      String sql = 'Select uid, emotion From mhreports order by uid desc;';
-      conn.query(sql).then((reports) {
-        print (reports.first);
-        return reports.first[1].toString();
-        for (var row in reports.first) {
-          print(row[1]);
-          return row[1];
-        }
-      });
-    });
-  }
-
-  void storeReports(emotion){
-    db.getConnection().then((conn) {
-      String sql = 'Insert into mhreports (`emotion`, `userUid`) ';
-      sql += 'values (?, 1)';
-      conn.query(sql, [emotion]).then((results) {
-        for(var row in results) {
-          print("Reported: " + row[1]);
-        }
-      });
+  Future<void> goToQuestion(String emotion, BuildContext context) async {
+    curReport.emotion = emotion;
+    curReport.getQuestion().then((value) async {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_){
+        return Question(curReport: curReport,);
+      })
+      );
     });
   }
 
@@ -67,7 +51,7 @@ class _emotionSelectState extends State<emotionSelect> {
               end: Alignment.bottomCenter,
               colors: <Color>[Color.fromARGB(255, 106, 229, 198), Colors.cyan.shade700]))
         ),
-        
+
         elevation: 0,
 
         actions: [
@@ -102,15 +86,8 @@ class _emotionSelectState extends State<emotionSelect> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
-                onPressed: () async {
-                  curReport.emotion = 'Relaxed';
-                  await Navigator.pushNamed(
-                      context,
-                      Question.routeName,
-                      arguments: curReport
-                  );
-                  curReport.emotion = null;
-                  curReport.question = null;
+                onPressed: () {
+                  goToQuestion('Relaxed', context);
                 },
                 child: Column(
                     children: [
@@ -118,22 +95,15 @@ class _emotionSelectState extends State<emotionSelect> {
                         color: Colors.amber,
                         size: 120.0,
                       ),
-                      Text('relaxed',
+                      Text('Relaxed',
                         style: TextStyle (fontSize: 24.0, color: Colors.black),
                       ),
                     ]
                 ),
               ),
               TextButton(
-                onPressed: () async {
-                  curReport.emotion = 'Happy';
-                  await Navigator.pushNamed(
-                      context,
-                      Question.routeName,
-                      arguments: curReport
-                  );
-                  curReport.emotion = null;
-                  curReport.question = null;
+                onPressed: () {
+                  goToQuestion('Happy', context);
                 },
                 child: Column(
                     children: [
@@ -141,22 +111,15 @@ class _emotionSelectState extends State<emotionSelect> {
                         color: Colors.yellow,
                         size: 120.0,
                       ),
-                      Text('happy',
+                      Text('Happy',
                         style: TextStyle(fontSize: 24.0, color: Colors.black),
                       ),
                     ]
                 ),
               ),
               TextButton(
-                onPressed: () async {
-                  curReport.emotion = 'excited';
-                  await Navigator.pushNamed(
-                      context,
-                      Question.routeName,
-                      arguments: curReport
-                  );
-                  curReport.emotion = null;
-                  curReport.question = null;
+                onPressed: () {
+                  goToQuestion('Excited', context);
                 },
                 child: Column(
                   children: [
@@ -164,7 +127,7 @@ class _emotionSelectState extends State<emotionSelect> {
                       color: Colors.lime,
                       size: 120.0,
                     ),
-                    Text('excited',
+                    Text('Excited',
                       style: TextStyle(fontSize: 24.0, color: Colors.black),
                     ),
                   ],
@@ -176,15 +139,8 @@ class _emotionSelectState extends State<emotionSelect> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
-                onPressed: () async {
-                  curReport.emotion = 'drained';
-                  await Navigator.pushNamed(
-                      context,
-                      Question.routeName,
-                      arguments: curReport
-                  );
-                  curReport.emotion = null;
-                  curReport.question = null;
+                onPressed: () {
+                  goToQuestion('Drained', context);
                 },
                 child: Column(
                     children: [
@@ -192,22 +148,15 @@ class _emotionSelectState extends State<emotionSelect> {
                         color: Colors.blueGrey,
                         size: 120.0,
                       ),
-                      Text('drained',
+                      Text('Drained',
                         style: TextStyle(fontSize: 24.0, color: Colors.black),
                       ),
                     ]
                 ),
               ),
               TextButton(
-                onPressed: () async {
-                  curReport.emotion = 'calm';
-                  await Navigator.pushNamed(
-                      context,
-                      Question.routeName,
-                      arguments: curReport
-                  );
-                  curReport.emotion = null;
-                  curReport.question = null;
+                onPressed: () {
+                  goToQuestion('Neutral', context);
                 },
                 child: Column(
                     children: [
@@ -215,22 +164,15 @@ class _emotionSelectState extends State<emotionSelect> {
                         color: Colors.grey,
                         size: 120.0,
                       ),
-                      Text('calm',
+                      Text('Calm',
                         style: TextStyle(fontSize: 24.0, color: Colors.black),
                       ),
                     ]
                 ),
               ),
               TextButton(
-                onPressed: () async {
-                  curReport.emotion = 'Stressed';
-                  await Navigator.pushNamed(
-                      context,
-                      Question.routeName,
-                      arguments: curReport
-                  );
-                  curReport.emotion = null;
-                  curReport.question = null;
+                onPressed: () {
+                  goToQuestion('Stressed', context);
                 },
                 child: Column(
                   children: [
@@ -238,7 +180,7 @@ class _emotionSelectState extends State<emotionSelect> {
                         color: Colors.indigoAccent,
                         size: 120.0
                     ),
-                    Text('stressed',
+                    Text('Stressed',
                       style: TextStyle(fontSize: 24.0, color: Colors.black),
                     ),
                   ],
@@ -250,15 +192,8 @@ class _emotionSelectState extends State<emotionSelect> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
-                onPressed: () async {
-                  curReport.emotion = 'Depressed';
-                  await Navigator.pushNamed(
-                      context,
-                      Question.routeName,
-                      arguments: curReport
-                  );
-                  curReport.emotion = null;
-                  curReport.question = null;
+                onPressed: () {
+                  goToQuestion('Depressed', context);
                 },
                 child: Column(
                     children: [
@@ -266,22 +201,15 @@ class _emotionSelectState extends State<emotionSelect> {
                           color: Colors.teal,
                           size: 120.0
                       ),
-                      Text('depressed',
+                      Text('Depressed',
                         style: TextStyle(fontSize: 24.0, color: Colors.black),
                       ),
                     ]
                 ),
               ),
               TextButton(
-                onPressed: () async {
-                  curReport.emotion = 'Sad';
-                  await Navigator.pushNamed(
-                      context,
-                      Question.routeName,
-                      arguments: curReport
-                  );
-                  curReport.emotion = null;
-                  curReport.question = null;
+                onPressed: () {
+                  goToQuestion('Sad', context);
                 },
                 child: Column(
                     children: [
@@ -289,22 +217,15 @@ class _emotionSelectState extends State<emotionSelect> {
                         color: Colors.cyan,
                         size: 120.0,
                       ),
-                      Text('sad',
+                      Text('Sad',
                         style: TextStyle(fontSize: 24.0, color: Colors.black),
                       ),
                     ]
                 ),
               ),
               TextButton(
-                onPressed: () async {
-                  curReport.emotion = 'Angry';
-                  await Navigator.pushNamed(
-                      context,
-                      Question.routeName,
-                      arguments: curReport
-                  );
-                  curReport.emotion = null;
-                  curReport.question = null;
+                onPressed: () {
+                  goToQuestion('Angry', context);
                 },
                 child: Column(
                   children: [
@@ -312,7 +233,7 @@ class _emotionSelectState extends State<emotionSelect> {
                       color: Colors.redAccent,
                       size: 120.0,
                     ),
-                    Text('angry',
+                    Text('Angry',
                       style: TextStyle(fontSize: 24.0, color: Colors.black),
                     ),
                   ],

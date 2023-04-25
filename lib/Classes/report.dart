@@ -34,17 +34,18 @@ class report {
 
   //Func which gets a random question based on the submitted emotion
   Future<void> getQuestion() async {
-    await db?.getConnection().then((conn) {
-        print('About to create sql');
+    print("Getting Repsonse Question");
+    db?.getConnection().then((conn) async {
+        //print('About to create sql');
         var sql = "select q.question ";
         sql +=
         "from emotionquestions as q join (emoque as eq join emotions as e on eq.euid = e.uid) on q.uid = eq.quid ";
         sql += "where e.emotion = ? ";
         sql += "order by rand();";
-        print('Created SQL statement: $sql \n emotion: $emotion');
+        //print('Created SQL statement: $sql \n emotion: $emotion');
 
-        conn.query(sql, [emotion]).then((result) {
-          print('returned: ${result}');
+        await conn.query(sql, [emotion]).then((result) {
+          //print('returned: ${result}');
           question = result.first[0];
         });
       });
