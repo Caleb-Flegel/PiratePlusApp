@@ -1,18 +1,44 @@
 //File will handle the chatGPT emotion reponse
 import 'package:flutter/material.dart';
 import '../Classes/report.dart';
+import '../Classes/GPT.dart';
 
 class gptResponse extends StatefulWidget {
+  const gptResponse({Key? key, this.curReport}) : super(key: key);
+
+  final report? curReport;
   static const routeName = '/report/gptResponse';
+
   @override
   State<gptResponse> createState() => _gptResponseState();
 }
 
 class _gptResponseState extends State<gptResponse> {
+  String gptResponse = "Loading...";
+
+  @override
+  void initState() {
+    print(widget.curReport?.emotion);
+    GPT gpt = GPT();
+
+    super.initState();
+
+    if (widget.curReport?.response == null) {
+      setState(() {
+        gptResponse = "Question not answered!";
+      });
+    }
+    else {
+      gpt.getResponse(widget.curReport).then((value) {
+        setState(() {
+          gptResponse = widget.curReport!.response!;
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    report curReport = ModalRoute.of(context)?.settings.arguments as report;
-
     var temp = "";
 
     return Scaffold(
@@ -35,9 +61,9 @@ class _gptResponseState extends State<gptResponse> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: <Color>[
-                Color.fromARGB(255, 106, 229, 198),
-                Colors.cyan.shade700
-              ]))),
+                        Color.fromARGB(255, 106, 229, 198),
+                        Colors.cyan.shade700
+                      ]))),
           elevation: 0,
           actions: [
             Column(
@@ -59,45 +85,40 @@ class _gptResponseState extends State<gptResponse> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('GPT Response'),
+          child: Center(
+            child: ListView(
+              children: [
+                Text('GPT Response'),
                 SizedBox(height: 50.0),
-              Text(
-                "*Here is where an eventual gpt response would go for the prompt:\n'How would you help me if to the question ${curReport.question}, I answered ${curReport.response}?",
-                style: TextStyle(
-                  fontSize: 20.0,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 400.0),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan.shade700),
-                  onPressed: () {
-                    setState(() {
-                      if (temp == '') {
-                        curReport.submitReport().then((reportTxt) {
-                          setState(() {
-                            temp = reportTxt;
-                          });
-                        });
-                      } else {}
-                    });
-                  },
-                  child: Text('Submit', style: TextStyle(fontWeight: FontWeight.bold))
+                Text(
+                  gptResponse,
+                  style: TextStyle(
+                    fontSize: 18.0,
                   ),
-              Text('$temp'),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent[400]),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(height: 100.0),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.cyan.shade700),
+                    onPressed: () {
+                      print (widget.curReport?.answer);
+                      widget.curReport?.submitReport();
+                    },
+                    child: Text('Submit',
+                        style: TextStyle(fontWeight: FontWeight.bold))
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent[400]),
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/');
                   },
                   child: Text('Go Home',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-            ],
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
           ),
         )
     );

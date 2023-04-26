@@ -1,34 +1,37 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:pirate_plus/pages/GPTEmotionRepsonse.dart';
 import '../Classes/report.dart';
 
-class Question extends StatelessWidget {
+class Question extends StatefulWidget {
   const Question({Key? key, this.curReport}) : super(key: key);
 
   static const routeName = "/report/emotionQuestion";
   final report? curReport;
 
   @override
+  State<Question> createState() => _QuestionState();
+}
+
+class _QuestionState extends State<Question> {
+  String questionTxt = "Loading...";
+
+  @override
+  void initState() {
+    super.initState();
+    setQuestion();
+  }
+  Future<void> setQuestion() async {
+    widget.curReport!.getQuestion().then((question) {
+      setState(() {
+        questionTxt = question;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // if (curReport.question == null) {
-    //   print ("getQuestion");
-    //   curReport.getQuestion().then((value) {
-    //     setState(() {
-    //       print("set temp");
-    //       temp = curReport.question;
-    //       print("1 question, ${curReport.question}");
-    //       print("1 temp, ${temp}");
-    //     });
-    //     print("2 question, ${curReport.question}");
-    //     print("2 temp, ${temp}");
-    //   });
-    // }
-    // else {
-    //   setState(() {
-    //     print("$temp");
-    //     temp = curReport.question;
-    //   });
-    // }
 
     TextEditingController emotionQuestion = TextEditingController();
 
@@ -94,7 +97,7 @@ class Question extends StatelessWidget {
             ),
             SizedBox(height: 40.0),
 
-            Text('${curReport?.question}',
+            Text(questionTxt,
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold),
@@ -112,25 +115,26 @@ class Question extends StatelessWidget {
                 hintText: 'Type here...',
               ),
             ),
+
             SizedBox(height: 100.0),
 
-            ElevatedButton(
-              onPressed: (){
-                print(curReport?.question);
-              },
-              child: Text("see curResport"),
-          ),
-
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.cyan[700],
+            ),
             onPressed: () async {
-              curReport?.response = emotionQuestion.text;
-                await Navigator.pushNamed(
-                    context,
-                    gptResponse.routeName,
-                    arguments: curReport
+                widget.curReport?.answer = emotionQuestion.text;
+                await Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                  return gptResponse(curReport: widget.curReport,);
+                })
                 );
               },
-                child: Text("Next ->"),
+                child: Text(
+                  "Next ->",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
             ),
           ],
         ),

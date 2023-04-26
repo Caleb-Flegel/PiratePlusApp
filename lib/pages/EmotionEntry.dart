@@ -20,12 +20,13 @@ class _emotionSelectState extends State<emotionSelect> {
 
   Future<void> goToQuestion(String emotion, BuildContext context) async {
     curReport.emotion = emotion;
-    curReport.getQuestion().then((value) async {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_){
+    await Navigator.of(context).push(MaterialPageRoute(builder: (_){
         return Question(curReport: curReport,);
       })
-      );
-    });
+    );
+    curReport.question = null;
+    curReport.emotion = null;
+    print("Reset curReport");
   }
 
   @override
