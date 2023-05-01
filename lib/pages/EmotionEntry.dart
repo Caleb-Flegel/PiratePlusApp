@@ -36,12 +36,7 @@ class _emotionSelectState extends State<emotionSelect> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Pirate "),
-            Image.asset(
-              "images/WhitworthUniversity-logo.png",
-              height: 30,
-            ),
-            Text(" Plus"),
+            Text("Pirate Plus"),
           ],
         ),
         centerTitle: true,

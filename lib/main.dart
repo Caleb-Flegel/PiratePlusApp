@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pirate_plus/pages/reportPicture.dart';
 import 'models/mysql.dart';
 import 'package:pirate_plus/pages/results.dart';
 import 'package:pirate_plus/pages/EmotionEntry.dart';
@@ -11,9 +12,10 @@ void main() => runApp(MaterialApp(
     '/results': (context) => results(),
     '/report/emotionEntry': (context) => emotionSelect(),
     '/report/emotionQuestion': (context) => Question(),
+    '/report/reportPicture': (context) => reportPicture(),
     '/report/gptResponse': (context) => gptResponse(),
-    //'/report/pictureEntry': (context) => ,
   },
+  debugShowCheckedModeBanner: false,
 ));
 
 class basic extends StatefulWidget {
@@ -43,12 +45,7 @@ class _basicState extends State<basic> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Pirate "),
-            Image.asset(
-              "images/WhitworthUniversity-logo.png",
-              height: 30,
-            ),
-            Text(" Plus"),
+            Text("Pirate Plus"),
           ],
         ),
         centerTitle: true,
@@ -74,7 +71,7 @@ class _basicState extends State<basic> {
             ]
           ),
           IconButton(
-              onPressed: () {print("Go edit user settings");},
+              onPressed: () {},
               icon: Icon(
                   Icons.person,
               ),
@@ -87,24 +84,25 @@ class _basicState extends State<basic> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            MaterialButton(
+            Text(
+                "Welcome!",
+              style: TextStyle(
+                fontSize: 40,
+                color: Colors.black,
+              ),
+            ),
+            ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/report/emotionEntry');
               },
-              color: Colors.grey[400],
-              child: Text(
-                  'Enter an emotion'
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.cyan[700],
               ),
-            ),
-            MaterialButton(
-              onPressed: (){
-                setState(() {
-                  results = "You are def seeing results";
-                });
-              },
-              color: Colors.grey[400],
               child: Text(
-                  results
+                  'Enter an emotion',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
           ],

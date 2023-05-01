@@ -1,41 +1,45 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+import 'package:pirate_plus/Classes/report.dart';
 import 'package:pirate_plus/pages/GPTEmotionRepsonse.dart';
-import 'package:pirate_plus/pages/reportPicture.dart';
-import '../Classes/report.dart';
 
-class Question extends StatefulWidget {
-  const Question({Key? key, this.curReport}) : super(key: key);
+class reportPicture extends StatefulWidget {
+  const reportPicture({Key? key, this.curReport}) : super(key: key);
 
-  static const routeName = "/report/emotionQuestion";
   final report? curReport;
 
   @override
-  State<Question> createState() => _QuestionState();
+  State<reportPicture> createState() => _reportPictureState();
 }
 
-class _QuestionState extends State<Question> {
-  String questionTxt = "Loading...";
+class _reportPictureState extends State<reportPicture> {
+  List<CameraDescription>? cameras;
+  CameraController? camControl;
+  XFile? image;
 
   @override
   void initState() {
     super.initState();
-    setQuestion();
   }
 
-  Future<void> setQuestion() async {
-    widget.curReport!.getQuestion().then((question) {
-      setState(() {
-        questionTxt = question;
+  loadCamera() async {
+    cameras = await availableCameras();
+    if (cameras != null) {
+      camControl = CameraController(cameras![0], ResolutionPreset.max);
+
+      camControl!.initialize().then((_) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {});
       });
-    });
+    } else {
+      print("No cam found!");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController emotionQuestion = TextEditingController();
-
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -75,13 +79,12 @@ class _QuestionState extends State<Question> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
-        child: SingleChildScrollView(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Answer some questions about your emotion!',
+                'Take a picture!',
                 style: TextStyle(
                   fontSize: 30.0,
                 ),
@@ -91,33 +94,41 @@ class _QuestionState extends State<Question> {
                 '(If you\'d like)',
                 style: TextStyle(fontSize: 18.0),
               ),
-              SizedBox(height: 40.0),
-              Text(
-                questionTxt,
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+              Container(
+                  height: 300,
+                  width: 400,
+                  child: camControl == null
+                      ? Center(
+                          child: Text("Loading Camera"),
+                        )
+                      : CameraPreview(camControl!)
               ),
-              SizedBox(height: 30.0),
-              TextField(
-                controller: emotionQuestion,
-                maxLines: null,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Type here...',
-                ),
+              ElevatedButton.icon(
+                  onPressed: () async{
+                    try {
+                      if (camControl != null) {
+                        if (camControl!.value.isInitialized) {
+                          image = await camControl!.takePicture();
+                          setSate() {
+
+                          }
+                        }
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  label: Text("Capture a picture!"),
+                icon: Icon(Icons.camera),
               ),
-              SizedBox(height: 100.0),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.cyan[700],
                 ),
                 onPressed: () async {
-                  widget.curReport?.answer = emotionQuestion.text;
                   await Navigator.of(context)
                       .push(MaterialPageRoute(builder: (_) {
-                    return reportPicture(
-                      curReport: widget.curReport,
-                    );
+                    return gptResponse(curReport: widget.curReport,);
                   }));
                 },
                 child: Text(

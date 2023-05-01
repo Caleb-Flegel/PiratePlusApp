@@ -23,12 +23,11 @@ class _gptResponseState extends State<gptResponse> {
 
     super.initState();
 
-    if (widget.curReport?.response == null) {
+    if (widget.curReport?.answer == "") {
       setState(() {
         gptResponse = "Question not answered!";
       });
-    }
-    else {
+    } else {
       gpt.getResponse(widget.curReport).then((value) {
         setState(() {
           gptResponse = widget.curReport!.response!;
@@ -42,85 +41,113 @@ class _gptResponseState extends State<gptResponse> {
     var temp = "";
 
     return Scaffold(
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Pirate "),
-              Image.asset(
-                "images/WhitworthUniversity-logo.png",
-                height: 30,
-              ),
-              Text(" Plus"),
-            ],
-          ),
-          centerTitle: true,
-          flexibleSpace: Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: <Color>[
-                        Color.fromARGB(255, 106, 229, 198),
-                        Colors.cyan.shade700
-                      ]))),
-          elevation: 0,
-          actions: [
-            Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text("User"),
-                  Text(" Name"),
-                ]),
-            IconButton(
-              onPressed: () {
-                print("Go edit user settings");
-              },
-              icon: Icon(
-                Icons.person,
-              ),
-            ),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Pirate Plus"),
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
-          child: Center(
-            child: ListView(
+        centerTitle: true,
+        flexibleSpace: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+                      Color.fromARGB(255, 106, 229, 198),
+                      Colors.cyan.shade700
+                    ]))),
+        elevation: 0,
+        actions: [
+          Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text('GPT Response'),
-                SizedBox(height: 50.0),
-                Text(
-                  gptResponse,
-                  style: TextStyle(
-                    fontSize: 18.0,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: 100.0),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.cyan.shade700),
-                    onPressed: () {
-                      print (widget.curReport?.answer);
-                      widget.curReport?.submitReport();
-                    },
-                    child: Text('Submit',
-                        style: TextStyle(fontWeight: FontWeight.bold))
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent[400]),
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/');
-                  },
-                  child: Text('Go Home',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                ),
-              ],
+                Text("User"),
+                Text(" Name"),
+              ]),
+          IconButton(
+            onPressed: () {
+              print("Go edit user settings");
+            },
+            icon: Icon(
+              Icons.person,
             ),
           ),
-        )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 1,
+                  child: Text(
+                      'GPT Response',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30,
+                    ),
+                  ),
+              ),
+              Expanded(
+                flex: 7,
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      width: 2,
+                      color: Colors.cyan.shade700,
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Text(
+                        gptResponse,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.cyan.shade700),
+                        onPressed: () {
+                          print(widget.curReport?.answer);
+                          widget.curReport?.submitReport();
+                        },
+                        child: Text('Submit',
+                            style: TextStyle(fontWeight: FontWeight.bold))),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent[400]),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/');
+                      },
+                      child: Text('Go Home',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
