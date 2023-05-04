@@ -1,31 +1,45 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:pirate_plus/pages/reportPicture.dart';
+import 'package:pirate_plus/Classes/report.dart';
 import 'models/mysql.dart';
 import 'package:pirate_plus/pages/results.dart';
 import 'package:pirate_plus/pages/EmotionEntry.dart';
 import 'package:pirate_plus/pages/emotionQuestion.dart';
 import 'package:pirate_plus/pages/GPTEmotionRepsonse.dart';
 
-void main() => runApp(MaterialApp(
-  routes: {
-    '/': (context) => basic(),
-    '/results': (context) => results(),
-    '/report/emotionEntry': (context) => emotionSelect(),
-    '/report/emotionQuestion': (context) => Question(),
-    '/report/reportPicture': (context) => reportPicture(),
-    '/report/gptResponse': (context) => gptResponse(),
-  },
-  debugShowCheckedModeBanner: false,
-));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final cameras = await availableCameras();
+  final camera = cameras.first;
+
+  runApp(MaterialApp(
+    theme: ThemeData.dark(),
+    routes: {
+      '/': (context) => basic(camera: camera),
+      '/results': (context) => results(),
+      '/report/emotionEntry': (context) => emotionSelect(camera: camera),
+      '/report/emotionQuestion': (context) => Question(camera: camera),
+      '/report/reportPicture': (context) => reportPicture(camera: camera),
+      '/report/gptResponse': (context) => gptResponse(),
+    },
+    debugShowCheckedModeBanner: false,
+  ));
+}
 
 class basic extends StatefulWidget {
-  const basic({Key? key}) : super(key: key);
+  const basic({Key? key, required this.camera}) : super(key: key);
+
+  final CameraDescription camera;
 
   @override
   State<basic> createState() => _basicState();
 }
 
 class _basicState extends State<basic> {
+  var db = mySql();
+  var curReport = report(mySql(), 1);
+
   var results = "See Most Recent Report";
 
   @override
@@ -93,7 +107,10 @@ class _basicState extends State<basic> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/report/emotionEntry');
+                Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                  return emotionSelect(camera: widget.camera, curReport: curReport,);
+                })
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.cyan[700],

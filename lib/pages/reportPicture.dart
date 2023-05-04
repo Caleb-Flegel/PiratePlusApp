@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pirate_plus/Classes/report.dart';
 import 'package:pirate_plus/pages/GPTEmotionRepsonse.dart';
 
 class reportPicture extends StatefulWidget {
-  const reportPicture({Key? key, this.curReport}) : super(key: key);
+  const reportPicture({Key? key, this.curReport, required this.camera}) : super(key: key);
 
+  final CameraDescription camera;
   final report? curReport;
 
   @override
@@ -13,9 +18,11 @@ class reportPicture extends StatefulWidget {
 }
 
 class _reportPictureState extends State<reportPicture> {
-  List<CameraDescription>? cameras;
-  CameraController? camControl;
-  XFile? image;
+  late CameraController _controller;
+  late Future<void> _initializeControllerFuture;
+  // List<CameraDescription>? cameras;
+  // CameraController? camControl;
+  // XFile? image;
 
   @override
   void initState() {
@@ -23,19 +30,30 @@ class _reportPictureState extends State<reportPicture> {
   }
 
   loadCamera() async {
-    cameras = await availableCameras();
-    if (cameras != null) {
-      camControl = CameraController(cameras![0], ResolutionPreset.max);
+    _controller = CameraController(
+        widget.camera,
+        ResolutionPreset.medium
+    );
+    _initializeControllerFuture = _controller.initialize();
 
-      camControl!.initialize().then((_) {
-        if (!mounted) {
-          return;
-        }
-        setState(() {});
-      });
-    } else {
-      print("No cam found!");
-    }
+    // cameras = await availableCameras();
+    // if (cameras != null) {
+    //   camControl = CameraController(cameras![0], ResolutionPreset.max);
+    //
+    //   camControl!.initialize().then((_) {
+    //     if (!mounted) {
+    //       return;
+    //     }
+    //     setState(() {});
+    //   });
+    // } else {
+    //   print("No cam found!");
+    // }
+  }
+
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -97,29 +115,43 @@ class _reportPictureState extends State<reportPicture> {
               Container(
                   height: 300,
                   width: 400,
-                  child: camControl == null
-                      ? Center(
-                          child: Text("Loading Camera"),
-                        )
-                      : CameraPreview(camControl!)
+                  child: FutureBuilder<void>(
+                    future: _initializeControllerFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return CameraPreview(_controller);
+
+                      } else {
+                        return const Center(child: CircularProgressIndicator(),);
+                      }
+                    },
+                  )
               ),
               ElevatedButton.icon(
                   onPressed: () async{
                     try {
-                      if (camControl != null) {
-                        if (camControl!.value.isInitialized) {
-                          image = await camControl!.takePicture();
-                          setSate() {
+                      await _initializeControllerFuture;
+                      final image = _controller.takePicture();
 
-                          }
-                        }
-                      }
+                      if(!mounted) return;
+
+                      // If the picture was taken, display it on a new screen.
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => DisplayPictureScreen(
+                            // Pass the automatically generated path to
+                            // the DisplayPictureScreen widget.
+                            image: image as XFile,
+                          ),
+                        ),
+                      );
+
                     } catch (e) {
                       print(e);
                     }
                   },
                   label: Text("Capture a picture!"),
-                icon: Icon(Icons.camera),
+                icon: Icon(Icons.camera_alt_outlined),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -142,6 +174,23 @@ class _reportPictureState extends State<reportPicture> {
           ),
         ),
       ),
+    );
+  }
+}
+
+// A widget that displays the picture taken by the user.
+class DisplayPictureScreen extends StatelessWidget {
+  final XFile image;
+
+  const DisplayPictureScreen({super.key, required this.image});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Preview')),
+      // The image is stored as a file on the device. Use the `Image.file`
+      // constructor with the given path to display the image.
+      body: Image.file(File(image.path)),
     );
   }
 }
