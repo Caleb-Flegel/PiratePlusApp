@@ -10,7 +10,7 @@ class report {
 
   report(this.db, this.userid);
 
-  copyReport(report old){
+  copyReport(report old) {
     db = old.db;
     userid = old.userid;
     emotion = old.emotion;
@@ -24,10 +24,12 @@ class report {
     print("test");
     //get db connection
     await db?.getConnection().then((conn) {
-      var sql = "INSERT INTO mhreports (`emotion`, `question`, `answer`, `response`, `userUid`) ";
+      var sql =
+          "INSERT INTO mhreports (`emotion`, `question`, `answer`, `response`, `userUid`) ";
       sql += "VALUES (?, ?, ?, ?, ?)"; //Create SQL statement
 
-      conn.query(sql, [emotion, question, answer, response, userid]).then((result) {
+      conn.query(sql, [emotion, question, answer, response, userid]).then(
+          (result) {
         return "Report:\nEmotion: ${result.first[0]}\nQuestion: ${result.first[1]}\nResponse: ${result.first[2]}";
       });
       //Run the query
@@ -39,19 +41,34 @@ class report {
   Future<String> getQuestion() async {
     print("Getting Repsonse Question");
     return db!.getConnection().then((conn) {
-        //print('About to create sql');
-        var sql = "select q.question ";
-        sql +=
-        "from emotionquestions as q join (emoque as eq join emotions as e on eq.euid = e.uid) on q.uid = eq.quid ";
-        sql += "where e.emotion = ? ";
-        sql += "order by rand();";
-        //print('Created SQL statement: $sql \n emotion: $emotion');
+      //print('About to create sql');
+      var sql = "select q.question ";
+      sql +=
+          "from emotionquestions as q join (emoque as eq join emotions as e on eq.euid = e.uid) on q.uid = eq.quid ";
+      sql += "where e.emotion = ? ";
+      sql += "order by rand();";
+      //print('Created SQL statement: $sql \n emotion: $emotion');
 
-        return conn.query(sql, [emotion]).then((result) {
-          //print('returned: ${result}');
-          question = result.first[0].toString();
-          return question!;
-        });
+      return conn.query(sql, [emotion]).then((result) {
+        //print('returned: ${result}');
+        question = result.first[0].toString();
+        return question!;
       });
+    });
+  }
+
+  //Func which gets a random quote on the home page
+  Future<List> getQuote() async {
+    return db!.getConnection().then((conn) {
+      //print('About to create sql');
+      var sql = "select i.`quote text`, i.`quote author` ";
+      sql += "from inspirationquotes as i ";
+      sql += "order by rand();";
+      //print('Created SQL statement: $sql \n emotion: $emotion');
+
+      return conn.query(sql, [emotion]).then((result) {
+        return [result.first[0], result.first[1]];
+      });
+    });
   }
 }

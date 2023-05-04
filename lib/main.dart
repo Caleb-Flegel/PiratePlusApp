@@ -42,6 +42,22 @@ class _basicState extends State<basic> {
 
   var results = "See Most Recent Report";
 
+  List QuoteSelection = ["null", "null"];
+
+   @override
+  void initState() {
+    super.initState();
+    //setQuote();
+  }
+
+  Future<void> setQuote() async {
+    curReport!.getQuote().then((quote) {
+      setState(() {
+        QuoteSelection = quote;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,6 +121,16 @@ class _basicState extends State<basic> {
                 color: Colors.black,
               ),
             ),
+
+            CircularProgressIndicator(),
+
+            // QuoteSelection[0] == "null"?
+            //   CircularProgressIndicator(),
+            //   :
+            //   Text("${QuoteSelection [0]} ~${QuoteSelection [1]}"
+              
+            // ),
+
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (_){
