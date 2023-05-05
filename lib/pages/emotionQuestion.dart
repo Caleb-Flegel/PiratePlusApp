@@ -115,6 +115,9 @@ class _QuestionState extends State<Question> {
                 ),
                 onPressed: () async {
                   widget.curReport?.answer = emotionQuestion.text;
+                  if (widget.curReport?.answer == "") {
+                    widget.curReport?.answer = null;
+                  }
                   await Navigator.of(context)
                       .push(MaterialPageRoute(builder: (_) {
                     return reportPicture(

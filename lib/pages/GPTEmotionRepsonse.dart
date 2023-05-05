@@ -42,12 +42,7 @@ class _gptResponseState extends State<gptResponse> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Pirate Plus"),
-          ],
-        ),
+        title: Text("Pirate Plus"),
         centerTitle: true,
         flexibleSpace: Container(
             decoration: BoxDecoration(

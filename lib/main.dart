@@ -11,10 +11,10 @@ import 'package:pirate_plus/pages/GPTEmotionRepsonse.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final cameras = await availableCameras();
-  final camera = cameras.first;
+  final camera = cameras.last;
 
   runApp(MaterialApp(
-    theme: ThemeData.dark(),
+    theme: ThemeData.light(),
     routes: {
       '/': (context) => basic(camera: camera),
       '/results': (context) => results(),
@@ -47,11 +47,16 @@ class _basicState extends State<basic> {
    @override
   void initState() {
     super.initState();
-    //setQuote();
+    DateTime now = new DateTime.now();
+    DateTime today = new DateTime(now.year, now.month, now.day);
+    print(today.toString());
+    curReport.date = today;
+    setQuote();
   }
 
   Future<void> setQuote() async {
-    curReport!.getQuote().then((quote) {
+    curReport.getQuote().then((quote) {
+      print("gotQuote");
       setState(() {
         QuoteSelection = quote;
       });
@@ -72,12 +77,7 @@ class _basicState extends State<basic> {
           ),
         ),
 
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Pirate Plus"),
-          ],
-        ),
+        title: Text("Pirate Plus"),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -110,45 +110,80 @@ class _basicState extends State<basic> {
       ),
 
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-                "Welcome!",
-              style: TextStyle(
-                fontSize: 40,
-                color: Colors.black,
-              ),
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
 
-            CircularProgressIndicator(),
-
-            // QuoteSelection[0] == "null"?
-            //   CircularProgressIndicator(),
-            //   :
-            //   Text("${QuoteSelection [0]} ~${QuoteSelection [1]}"
-              
-            // ),
-
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_){
-                  return emotionSelect(camera: widget.camera, curReport: curReport,);
-                })
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.cyan[700],
-              ),
-              child: Text(
-                  'Enter an emotion',
-                style: TextStyle(
-                  color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Text(
+                    "Welcome!",
+                  style: TextStyle(
+                    fontSize: 40,
+                    color: Colors.black,
+                  ),
                 ),
               ),
-            ),
-          ],
+
+              SizedBox(height: 50,),
+
+              Expanded(
+                flex: 16,
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      width: 2,
+                      color: Colors.cyan.shade700,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      QuoteSelection[0] == "null"?
+                        CircularProgressIndicator()
+                          :
+                        Text(
+                            "${QuoteSelection [0]}\n~${QuoteSelection [1]}",
+                          style: TextStyle(
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 50,),
+
+              Expanded(
+                flex: 2,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                      return emotionSelect(camera: widget.camera, curReport: curReport,);
+                    })
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.cyan[700],
+                  ),
+                  child: Text(
+                      'Enter an emotion',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
