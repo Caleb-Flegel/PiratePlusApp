@@ -23,7 +23,7 @@ class _gptResponseState extends State<gptResponse> {
 
     super.initState();
 
-    if (widget.curReport?.answer == "") {
+    if (widget.curReport?.answer == null) {
       setState(() {
         gptResponse = "Question not answered!";
       });
