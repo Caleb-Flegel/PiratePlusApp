@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:pirate_plus/pages/GPTEmotionRepsonse.dart';
@@ -7,10 +5,10 @@ import 'package:pirate_plus/pages/reportPicture.dart';
 import '../Classes/report.dart';
 
 class Question extends StatefulWidget {
-  const Question({Key? key, this.curReport, required this.camera}) : super(key: key);
+  const Question({Key? key, this.curReport, this.camera}) : super(key: key);
 
   static const routeName = "/report/emotionQuestion";
-  final CameraDescription camera;
+  final CameraDescription? camera;
   final report? curReport;
 
   @override

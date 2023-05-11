@@ -28,9 +28,9 @@ Future<void> main() async {
 }
 
 class basic extends StatefulWidget {
-  const basic({Key? key, required this.camera}) : super(key: key);
+  const basic({Key? key, this.camera}) : super(key: key);
 
-  final CameraDescription camera;
+  final CameraDescription? camera;
 
   @override
   State<basic> createState() => _basicState();

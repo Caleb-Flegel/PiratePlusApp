@@ -6,11 +6,11 @@ import '../widgets/appBar.dart';
 import '../Classes/report.dart';
 
 class emotionSelect extends StatefulWidget {
-  const emotionSelect({Key? key, this.curReport, required this.camera}) : super(key: key);
+  const emotionSelect({Key? key, this.curReport, this.camera}) : super(key: key);
 
   static const routeName = "/report/emotionEntry";
   final report? curReport;
-  final CameraDescription camera;
+  final CameraDescription? camera;
 
   @override
   State<emotionSelect> createState() => _emotionSelectState();

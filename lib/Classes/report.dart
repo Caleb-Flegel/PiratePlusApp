@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:pirate_plus/pages/reportPicture.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../models/mysql.dart';
 
@@ -30,14 +31,16 @@ class report {
   Future<String> submitReport() async {
     print("test");
     //get db connection
+    picture?.path != null? print("good + ${picture?.path}") : print("bad path");
+
     await db?.getConnection().then((conn) {
       var sql =
-          "INSERT INTO mhreports (`emotion`, `question`, `answer`, `response`, `userUid`, `date`) ";
-      sql += "VALUES (?, ?, ?, ?, ?, STR_TO_DATE(?, '%m/%d/%Y'))"; //Create SQL statement
+          "INSERT INTO mhreports (`emotion`, `question`, `answer`, `response`, `userUid`, `date`, `photo`) ";
+      sql += "VALUES (?, ?, ?, ?, ?, STR_TO_DATE(?, '%m/%d/%Y'), LOAD_FILE(?))"; //Create SQL statement
 
-      conn.query(sql, [emotion, question, answer, response, userid, "${date?.month.toString()}/${date?.day.toString()}/${date?.year.toString()}"]).then(
+      conn.query(sql, [emotion, question, answer, response, userid, "${date?.month.toString()}/${date?.day.toString()}/${date?.year.toString()}", picture?.path]).then(
           (result) {
-        return "Report:\nEmotion: ${result.first[0]}\nQuestion: ${result.first[1]}\nResponse: ${result.first[2]}";
+              return "Report:\nEmotion: ${result.first[0]}\nQuestion: ${result.first[1]}\nResponse: ${result.first[2]}";
       });
       //Run the query
     });
