@@ -10,23 +10,23 @@ import 'package:pirate_plus/pages/EmotionEntry.dart';
 import 'package:pirate_plus/pages/emotionQuestion.dart';
 import 'package:pirate_plus/pages/GPTEmotionRepsonse.dart';
 import 'package:pirate_plus/pages/login.dart';
+import 'package:pirate_plus/pages/Account.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final Session tempSession = Session();
 
   runApp(MaterialApp(
     theme: ThemeData.light(),
     initialRoute: '/login',
     routes: {
-      '/': (context) => basic(curSession: tempSession,),
+      '/': (context) => basic(),
       '/login': (context) => login(),
+      '/account': (context) => AccountViewer(),
       '/report/reports': (context) => results(),
-      '/report/emotionEntry': (context) => emotionSelect(curSession: tempSession),
-      '/report/emotionQuestion': (context) => Question(curSession: tempSession),
-      '/report/reportPicture': (context) => reportPicture(curSession: tempSession),
-      '/report/gptResponse': (context) => gptResponse(curSession: tempSession),
+      '/report/emotionEntry': (context) => emotionSelect(),
+      '/report/emotionQuestion': (context) => Question(),
+      '/report/reportPicture': (context) => reportPicture(),
+      '/report/gptResponse': (context) => gptResponse(),
     },
     debugShowCheckedModeBanner: false,
   ));
@@ -102,15 +102,20 @@ class _basicState extends State<basic> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                  "User"
+                  "${widget.curSession?.firstname}"
               ),
               Text(
-                  " Name"
+                  " ${widget.curSession?.lastname}"
               ),
             ]
           ),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                  return AccountViewer(curSession: widget.curSession,);
+                })
+                );
+              },
               icon: Icon(
                   Icons.person,
               ),
@@ -129,7 +134,7 @@ class _basicState extends State<basic> {
               Expanded(
                 flex: 2,
                 child: Text(
-                    "Welcome!",
+                    "Welcome, ${widget.curSession?.firstname}!",
                   style: TextStyle(
                     fontSize: 40,
                     color: Colors.black,

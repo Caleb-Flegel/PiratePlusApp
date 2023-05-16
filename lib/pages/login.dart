@@ -85,7 +85,7 @@ class _loginState extends State<login> {
                     if (username.text.isNotEmpty && password.text.isNotEmpty) {
                       print("try login");
                       newSession.userID = (await newSession.loginAttempt(
-                          username.text, password.text))!;
+                          username.text, password.text));
 
                       if (newSession.userID == -1) {
                         print("login error");
@@ -95,17 +95,17 @@ class _loginState extends State<login> {
                       } else {
                         print("login success");
 
-                        newSession.setup();
-
-                        //Go home
-                        Navigator.pushReplacement<void, void>(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) => basic(
+                        await newSession.setup().then((value) {
+                          //Go home
+                          Navigator.pushReplacement<void, void>(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) => basic(
                               curSession: newSession,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        });
                       }
                     } else {
                       setState(() {
@@ -229,16 +229,16 @@ class _signUpState extends State<signUp> {
                           status = "Email or password already used";
                         });
                       } else {
-                        widget.newSession.setup();
-
-                        //Go home
-                        Navigator.pushReplacement<void, void>(
+                        await widget.newSession.setup().then((value) {
+                          //Go home
+                          Navigator.pushReplacement<void, void>(
                             context,
                             MaterialPageRoute<void>(
                               builder: (BuildContext context) => basic(
-                                curSession: widget.newSession,
+                              curSession: widget.newSession,
                               ),
-                            ));
+                          ));
+                        });
                       }
                     } else {
                       print("no info");

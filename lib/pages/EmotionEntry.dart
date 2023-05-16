@@ -5,6 +5,7 @@ import 'package:pirate_plus/pages/emotionQuestion.dart';
 import '../models/mysql.dart';
 import '../widgets/appBar.dart';
 import '../Classes/report.dart';
+import 'Account.dart';
 
 class emotionSelect extends StatefulWidget {
   const emotionSelect({Key? key, this.curSession, this.camera}) : super(key: key);
@@ -61,15 +62,20 @@ class _emotionSelectState extends State<emotionSelect> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                    "User"
+                    "${widget.curSession?.firstname}"
                 ),
                 Text(
-                    " Name"
+                    " ${widget.curSession?.lastname}"
                 ),
               ]
           ),
           IconButton(
-            onPressed: () {print("Go edit user settings");},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                return AccountViewer(curSession: widget.curSession,);
+              })
+              );
+            },
             icon: Icon(
               Icons.person,
             ),

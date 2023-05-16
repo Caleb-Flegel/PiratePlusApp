@@ -8,6 +8,8 @@ import 'package:pirate_plus/Classes/session.dart';
 import 'package:pirate_plus/pages/GPTEmotionRepsonse.dart';
 import 'dart:math';
 
+import 'Account.dart';
+
 class reportPicture extends StatefulWidget {
   const reportPicture({Key? key, this.curSession, this.camera})
       : super(key: key);
@@ -71,12 +73,19 @@ class _reportPictureState extends State<reportPicture> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text("User"),
-                Text(" Name"),
+                Text(
+                    "${widget.curSession?.firstname}"
+                ),
+                Text(
+                    " ${widget.curSession?.lastname}"
+                ),
               ]),
           IconButton(
             onPressed: () {
-              print("Go edit user settings");
+              Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                return AccountViewer(curSession: widget.curSession,);
+              })
+              );
             },
             icon: Icon(
               Icons.person,

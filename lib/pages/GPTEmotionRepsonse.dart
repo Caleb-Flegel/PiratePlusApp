@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pirate_plus/Classes/session.dart';
 import '../Classes/report.dart';
 import '../Classes/GPT.dart';
+import 'Account.dart';
 
 class gptResponse extends StatefulWidget {
   const gptResponse({Key? key, this.curSession}) : super(key: key);
@@ -61,12 +62,19 @@ class _gptResponseState extends State<gptResponse> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text("User"),
-                Text(" Name"),
+                Text(
+                    "${widget.curSession?.firstname}"
+                ),
+                Text(
+                    " ${widget.curSession?.lastname}"
+                ),
               ]),
           IconButton(
             onPressed: () {
-              print("Go edit user settings");
+              Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                return AccountViewer(curSession: widget.curSession,);
+              })
+              );
             },
             icon: Icon(
               Icons.person,

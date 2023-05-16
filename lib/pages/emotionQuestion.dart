@@ -4,6 +4,7 @@ import 'package:pirate_plus/Classes/session.dart';
 import 'package:pirate_plus/pages/GPTEmotionRepsonse.dart';
 import 'package:pirate_plus/pages/reportPicture.dart';
 import '../Classes/report.dart';
+import 'Account.dart';
 
 class Question extends StatefulWidget {
   const Question({Key? key, this.curSession, this.camera}) : super(key: key);
@@ -64,12 +65,19 @@ class _QuestionState extends State<Question> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text("User"),
-                Text(" Name"),
+                Text(
+                    "${widget.curSession?.firstname}"
+                ),
+                Text(
+                    " ${widget.curSession?.lastname}"
+                ),
               ]),
           IconButton(
             onPressed: () {
-              print("Go edit user settings");
+              Navigator.of(context).push(MaterialPageRoute(builder: (_){
+                return AccountViewer(curSession: widget.curSession,);
+              })
+              );
             },
             icon: Icon(
               Icons.person,
