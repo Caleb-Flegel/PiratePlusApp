@@ -4,15 +4,16 @@ import 'package:camera/camera.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pirate_plus/Classes/report.dart';
+import 'package:pirate_plus/Classes/session.dart';
 import 'package:pirate_plus/pages/GPTEmotionRepsonse.dart';
 import 'dart:math';
 
 class reportPicture extends StatefulWidget {
-  const reportPicture({Key? key, this.curReport, this.camera})
+  const reportPicture({Key? key, this.curSession, this.camera})
       : super(key: key);
 
   final CameraDescription? camera;
-  final report? curReport;
+  final Session? curSession;
 
   @override
   State<reportPicture> createState() => _reportPictureState();
@@ -29,13 +30,17 @@ class _reportPictureState extends State<reportPicture> {
   @override
   void initState() {
     super.initState();
+    print ("camera init state");
+    print(widget.camera);
     if (widget.camera != null) loadCamera();
   }
 
   loadCamera() async {
     if (widget.camera != null) {
+      print ("working on camera initialization");
       CameraDescription temp = widget.camera as CameraDescription;
       _controller = CameraController(temp, ResolutionPreset.max);
+      print ("nearly done with camera initialization");
       _initializeControllerFuture = _controller.initialize();
     }
   }
@@ -149,7 +154,7 @@ class _reportPictureState extends State<reportPicture> {
                             final image = await _controller.takePicture();
 
                             if (!mounted) return;
-                            widget.curReport?.picture = image;
+                            widget.curSession?.curReport?.picture = image;
 
                             // If the picture was taken, display it on a new screen.
                             await Navigator.of(context).push(
@@ -158,7 +163,7 @@ class _reportPictureState extends State<reportPicture> {
                                   // Pass the automatically generated path to
                                   // the DisplayPictureScreen widget.
                                   image: image,
-                                  curReport: widget.curReport,
+                                  curSession: widget.curSession,
                                 ),
                               ),
                             );
@@ -184,7 +189,7 @@ class _reportPictureState extends State<reportPicture> {
                     await Navigator.of(context)
                         .push(MaterialPageRoute(builder: (_) {
                       return gptResponse(
-                        curReport: widget.curReport,
+                        curSession: widget.curSession,
                       );
                     }));
                   },
@@ -206,10 +211,10 @@ class _reportPictureState extends State<reportPicture> {
 
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatelessWidget {
-  const DisplayPictureScreen({super.key, required this.image, this.curReport});
+  const DisplayPictureScreen({super.key, required this.image, this.curSession});
 
   final XFile image;
-  final report? curReport;
+  final Session? curSession;
 
   @override
   Widget build(BuildContext context) {
@@ -282,7 +287,7 @@ class DisplayPictureScreen extends StatelessWidget {
                     await Navigator.of(context)
                         .push(MaterialPageRoute(builder: (_) {
                       return gptResponse(
-                        curReport: curReport,
+                        curSession: curSession,
                       );
                     }));
                   },

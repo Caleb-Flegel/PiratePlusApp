@@ -1,15 +1,16 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:pirate_plus/Classes/session.dart';
 import 'package:pirate_plus/pages/emotionQuestion.dart';
 import '../models/mysql.dart';
 import '../widgets/appBar.dart';
 import '../Classes/report.dart';
 
 class emotionSelect extends StatefulWidget {
-  const emotionSelect({Key? key, this.curReport, this.camera}) : super(key: key);
+  const emotionSelect({Key? key, this.curSession, this.camera}) : super(key: key);
 
   static const routeName = "/report/emotionEntry";
-  final report? curReport;
+  final Session? curSession;
   final CameraDescription? camera;
 
   @override
@@ -21,14 +22,21 @@ class _emotionSelectState extends State<emotionSelect> {
   String recentResult = '';
 
   Future<void> goToQuestion(String emotion, BuildContext context) async {
-    widget.curReport?.emotion = emotion;
+    widget.curSession?.curReport?.emotion = emotion;
     await Navigator.of(context).push(MaterialPageRoute(builder: (_){
-        return Question(curReport: widget.curReport, camera: widget.camera,);
+        return Question(curSession: widget.curSession, camera: widget.camera,);
       })
     );
-    widget.curReport?.question = null;
-    widget.curReport?.emotion = null;
+    widget.curSession?.curReport?.question = null;
+    widget.curSession?.curReport?.emotion = null;
     print("Reset curReport");
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.camera);
   }
 
   @override

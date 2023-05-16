@@ -1,44 +1,49 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:pirate_plus/pages/reportPicture.dart';
 import 'package:pirate_plus/Classes/report.dart';
+import 'package:pirate_plus/Classes/session.dart';
 import 'models/mysql.dart';
 import 'package:pirate_plus/pages/results.dart';
 import 'package:pirate_plus/pages/EmotionEntry.dart';
 import 'package:pirate_plus/pages/emotionQuestion.dart';
 import 'package:pirate_plus/pages/GPTEmotionRepsonse.dart';
+import 'package:pirate_plus/pages/login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final cameras = await availableCameras();
-  final camera = cameras.last;
+
+  final Session tempSession = Session();
 
   runApp(MaterialApp(
     theme: ThemeData.light(),
+    initialRoute: '/login',
     routes: {
-      '/': (context) => basic(camera: camera),
-      '/results': (context) => results(),
-      '/report/emotionEntry': (context) => emotionSelect(camera: camera),
-      '/report/emotionQuestion': (context) => Question(camera: camera),
-      '/report/reportPicture': (context) => reportPicture(camera: camera),
-      '/report/gptResponse': (context) => gptResponse(),
+      '/': (context) => basic(curSession: tempSession,),
+      '/login': (context) => login(),
+      '/report/reports': (context) => results(),
+      '/report/emotionEntry': (context) => emotionSelect(curSession: tempSession),
+      '/report/emotionQuestion': (context) => Question(curSession: tempSession),
+      '/report/reportPicture': (context) => reportPicture(curSession: tempSession),
+      '/report/gptResponse': (context) => gptResponse(curSession: tempSession),
     },
     debugShowCheckedModeBanner: false,
   ));
 }
 
 class basic extends StatefulWidget {
-  const basic({Key? key, this.camera}) : super(key: key);
+  const basic({Key? key, this.curSession}) : super(key: key);
 
-  final CameraDescription? camera;
+  final Session? curSession;
 
   @override
   State<basic> createState() => _basicState();
 }
 
 class _basicState extends State<basic> {
-  var db = mySql();
-  var curReport = report(mySql(), 1);
+
+  late CameraDescription camera;
 
   var results = "See Most Recent Report";
 
@@ -47,15 +52,19 @@ class _basicState extends State<basic> {
    @override
   void initState() {
     super.initState();
-    DateTime now = new DateTime.now();
-    DateTime today = new DateTime(now.year, now.month, now.day);
-    print(today.toString());
-    curReport.date = today;
     setQuote();
+    widget.curSession?.curReport?.date = DateTime.now();
+    setCameras();
+  }
+
+  Future<void> setCameras() async {
+    final cameras = await availableCameras();
+    camera = cameras.last;
+    print(camera);
   }
 
   Future<void> setQuote() async {
-    curReport.getQuote().then((quote) {
+    widget.curSession?.getQuote().then((quote) {
       print("gotQuote");
       setState(() {
         QuoteSelection = quote;
@@ -167,7 +176,7 @@ class _basicState extends State<basic> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(builder: (_){
-                      return emotionSelect(camera: widget.camera, curReport: curReport,);
+                      return emotionSelect(camera: camera, curSession: widget.curSession,);
                     })
                     );
                   },

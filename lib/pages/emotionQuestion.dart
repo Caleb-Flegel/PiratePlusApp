@@ -1,15 +1,16 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:pirate_plus/Classes/session.dart';
 import 'package:pirate_plus/pages/GPTEmotionRepsonse.dart';
 import 'package:pirate_plus/pages/reportPicture.dart';
 import '../Classes/report.dart';
 
 class Question extends StatefulWidget {
-  const Question({Key? key, this.curReport, this.camera}) : super(key: key);
+  const Question({Key? key, this.curSession, this.camera}) : super(key: key);
 
   static const routeName = "/report/emotionQuestion";
   final CameraDescription? camera;
-  final report? curReport;
+  final Session? curSession;
 
   @override
   State<Question> createState() => _QuestionState();
@@ -21,13 +22,16 @@ class _QuestionState extends State<Question> {
   @override
   void initState() {
     super.initState();
+    print(widget.camera);
     setQuestion();
   }
 
   Future<void> setQuestion() async {
-    widget.curReport!.getQuestion().then((question) {
+    print ("setting question");
+    await widget.curSession?.curReport!.getQuestion(widget.curSession?.db).then((question) {
+      print("got question");
       setState(() {
-        questionTxt = question;
+        questionTxt = question!;
       });
     });
   }
@@ -112,14 +116,14 @@ class _QuestionState extends State<Question> {
                   backgroundColor: Colors.cyan[700],
                 ),
                 onPressed: () async {
-                  widget.curReport?.answer = emotionQuestion.text;
-                  if (widget.curReport?.answer == "") {
-                    widget.curReport?.answer = null;
+                  widget.curSession?.curReport?.answer = emotionQuestion.text;
+                  if (widget.curSession?.curReport?.answer == "") {
+                    widget.curSession?.curReport?.answer = null;
                   }
                   await Navigator.of(context)
                       .push(MaterialPageRoute(builder: (_) {
                     return reportPicture(
-                      curReport: widget.curReport,
+                      curSession: widget.curSession,
                       camera: widget.camera,
                     );
                   }));

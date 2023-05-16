@@ -6,20 +6,14 @@ import 'package:path_provider/path_provider.dart';
 import '../models/mysql.dart';
 
 class report {
-  mySql? db;
-  int? userid;
-  String? emotion;
+  late String? emotion;
   String? question;
   String? answer;
   String? response;
   DateTime? date;
   XFile? picture;
 
-  report(this.db, this.userid);
-
   copyReport(report old) {
-    db = old.db;
-    userid = old.userid;
     emotion = old.emotion;
     question = old.question;
     answer = old.answer;
@@ -27,8 +21,28 @@ class report {
     picture = old.picture;
   }
 
+  //Func which gets a random question based on the submitted emotion
+  Future<String?> getQuestion(mySql? db) async {
+    print("Getting Repsonse Question");
+    return await db?.getConnection().then((conn) {
+      print('About to create sql');
+      var sql = "select q.question ";
+      sql +=
+      "from emotionquestions as q join (emoque as eq join emotions as e on eq.euid = e.uid) on q.uid = eq.quid ";
+      sql += "where e.emotion = ? ";
+      sql += "order by rand();";
+      print('Created SQL statement: $sql \n emotion: $emotion');
+
+      return conn.query(sql, [emotion]).then((result) {
+        print('returned: ${result}');
+        question = result.first[0].toString();
+        return result.first[0].toString();
+      });
+    });
+  }
+
   //Func to submit a report
-  Future<String> submitReport() async {
+  Future<String> submitReport(mySql? db, int? userid) async {
     print("test");
     //get db connection
     picture?.path != null? print("good + ${picture?.path}") : print("bad path");
@@ -45,40 +59,5 @@ class report {
       //Run the query
     });
     return "Error";
-  }
-
-  //Func which gets a random question based on the submitted emotion
-  Future<String> getQuestion() async {
-    print("Getting Repsonse Question");
-    return db!.getConnection().then((conn) {
-      //print('About to create sql');
-      var sql = "select q.question ";
-      sql +=
-          "from emotionquestions as q join (emoque as eq join emotions as e on eq.euid = e.uid) on q.uid = eq.quid ";
-      sql += "where e.emotion = ? ";
-      sql += "order by rand();";
-      //print('Created SQL statement: $sql \n emotion: $emotion');
-
-      return conn.query(sql, [emotion]).then((result) {
-        //print('returned: ${result}');
-        question = result.first[0].toString();
-        return question!;
-      });
-    });
-  }
-
-  //Func which gets a random quote on the home page
-  Future<List> getQuote() async {
-    return db!.getConnection().then((conn) {
-      //print('About to create sql');
-      var sql = "select i.`quote text`, i.`quote author` ";
-      sql += "from inspirationquotes as i ";
-      sql += "order by rand();";
-      //print('Created SQL statement: $sql \n emotion: $emotion');
-
-      return conn.query(sql).then((result) {
-        return [result.first[0], result.first[1]];
-      });
-    });
   }
 }

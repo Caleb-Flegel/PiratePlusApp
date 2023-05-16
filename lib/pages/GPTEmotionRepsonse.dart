@@ -1,12 +1,13 @@
 //File will handle the chatGPT emotion reponse
 import 'package:flutter/material.dart';
+import 'package:pirate_plus/Classes/session.dart';
 import '../Classes/report.dart';
 import '../Classes/GPT.dart';
 
 class gptResponse extends StatefulWidget {
-  const gptResponse({Key? key, this.curReport}) : super(key: key);
+  const gptResponse({Key? key, this.curSession}) : super(key: key);
 
-  final report? curReport;
+  final Session? curSession;
   static const routeName = '/report/gptResponse';
 
   @override
@@ -14,23 +15,25 @@ class gptResponse extends StatefulWidget {
 }
 
 class _gptResponseState extends State<gptResponse> {
-  String gptResponse = "Loading...";
+  String? gptResponse = "Loading...";
+
+  var submitReport = false;
 
   @override
   void initState() {
-    print(widget.curReport?.emotion);
+    print(widget.curSession?.curReport?.emotion);
     GPT gpt = GPT();
 
     super.initState();
 
-    if (widget.curReport?.answer == null) {
+    if (widget.curSession?.curReport?.answer == null) {
       setState(() {
         gptResponse = "Question not answered!";
       });
     } else {
-      gpt.getResponse(widget.curReport).then((value) {
+      gpt.getResponse(widget.curSession?.curReport).then((value) {
         setState(() {
-          gptResponse = widget.curReport!.response!;
+          gptResponse = widget.curSession?.curReport?.response ;
         });
       });
     }
@@ -38,7 +41,6 @@ class _gptResponseState extends State<gptResponse> {
 
   @override
   Widget build(BuildContext context) {
-    var temp = "";
 
     return Scaffold(
       appBar: AppBar(
@@ -104,7 +106,7 @@ class _gptResponseState extends State<gptResponse> {
                   ),
                   child: SingleChildScrollView(
                     child: Text(
-                        gptResponse,
+                        "$gptResponse",
                         style: TextStyle(
                           fontSize: 18.0,
                         ),
@@ -118,14 +120,26 @@ class _gptResponseState extends State<gptResponse> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    (submitReport == false) ?
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.cyan.shade700),
                         onPressed: () {
-                          print(widget.curReport?.answer);
-                          widget.curReport?.submitReport();
+                          print(widget.curSession?.curReport?.answer);
+                          widget.curSession?.curReport?.submitReport(widget.curSession?.db, widget.curSession?.userID).then((value) => {
+                            setState(() {
+                              submitReport = true;
+                            })
+                          });
                         },
                         child: Text('Submit',
+                            style: TextStyle(fontWeight: FontWeight.bold)))
+                    :
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey.shade800),
+                        onPressed: () {},
+                        child: Text('Report Submitted',
                             style: TextStyle(fontWeight: FontWeight.bold))),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
