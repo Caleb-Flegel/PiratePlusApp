@@ -42,14 +42,13 @@ class basic extends StatefulWidget {
 }
 
 class _basicState extends State<basic> {
-
   late CameraDescription camera;
 
   var results = "See Most Recent Report";
 
   List QuoteSelection = ["null", "null"];
 
-   @override
+  @override
   void initState() {
     super.initState();
     setQuote();
@@ -59,7 +58,14 @@ class _basicState extends State<basic> {
 
   Future<void> setCameras() async {
     final cameras = await availableCameras();
-    camera = cameras.last;
+    if (cameras.isEmpty) {
+      camera = CameraDescription(
+          name: "none",
+          lensDirection: CameraLensDirection.front,
+          sensorOrientation: 1);
+    } else {
+      camera = cameras.last;
+    }
     print(camera);
   }
 
@@ -76,7 +82,6 @@ class _basicState extends State<basic> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
         leading: IconButton(
           onPressed: () {
             print('You opened the side menu!');
@@ -85,48 +90,43 @@ class _basicState extends State<basic> {
             Icons.menu,
           ),
         ),
-
         title: Text("Pirate Plus"),
         centerTitle: true,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: <Color>[Color.fromARGB(255, 106, 229, 198), Colors.cyan.shade700]))
-        ),
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+              Color.fromARGB(255, 106, 229, 198),
+              Colors.cyan.shade700
+            ]))),
         elevation: 0,
         actions: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                  "${widget.curSession?.firstname}"
-              ),
-              Text(
-                  " ${widget.curSession?.lastname}"
-              ),
-            ]
-          ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text("${widget.curSession?.firstname}"),
+                Text(" ${widget.curSession?.lastname}"),
+              ]),
           IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_){
-                  return AccountViewer(curSession: widget.curSession,);
-                })
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                return AccountViewer(
+                  curSession: widget.curSession,
                 );
-              },
-              icon: Icon(
-                  Icons.person,
-              ),
+              }));
+            },
+            icon: Icon(
+              Icons.person,
+            ),
           ),
         ],
       ),
-
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(30.0),
-
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -134,16 +134,16 @@ class _basicState extends State<basic> {
               Expanded(
                 flex: 2,
                 child: Text(
-                    "Welcome, ${widget.curSession?.firstname}!",
+                  "Welcome, ${widget.curSession?.firstname}!",
                   style: TextStyle(
                     fontSize: 40,
                     color: Colors.black,
                   ),
                 ),
               ),
-
-              SizedBox(height: 50,),
-
+              SizedBox(
+                height: 50,
+              ),
               Expanded(
                 flex: 16,
                 child: Container(
@@ -160,36 +160,36 @@ class _basicState extends State<basic> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      QuoteSelection[0] == "null"?
-                        CircularProgressIndicator()
-                          :
-                        Text(
-                            "${QuoteSelection [0]}\n~${QuoteSelection [1]}",
-                          style: TextStyle(
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
+                      QuoteSelection[0] == "null"
+                          ? CircularProgressIndicator()
+                          : Text(
+                              "${QuoteSelection[0]}\n~${QuoteSelection[1]}",
+                              style: TextStyle(),
+                              textAlign: TextAlign.center,
+                            ),
                     ],
                   ),
                 ),
               ),
-
-              SizedBox(height: 50,),
-
+              SizedBox(
+                height: 50,
+              ),
               Expanded(
                 flex: 2,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_){
-                      return emotionSelect(camera: camera, curSession: widget.curSession,);
-                    })
-                    );
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                      return emotionSelect(
+                        camera: camera,
+                        curSession: widget.curSession,
+                      );
+                    }));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.cyan[700],
                   ),
                   child: Text(
-                      'Enter an emotion',
+                    'Enter an emotion',
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -203,4 +203,3 @@ class _basicState extends State<basic> {
     );
   }
 }
-
