@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -5,6 +7,8 @@ import 'package:pirate_plus/pages/reportPicture.dart';
 import 'package:pirate_plus/Classes/report.dart';
 import 'package:pirate_plus/Classes/session.dart';
 import 'models/mysql.dart';
+import 'dart:convert';
+import 'package:typed_data/typed_data.dart';
 import 'package:pirate_plus/pages/results.dart';
 import 'package:pirate_plus/pages/EmotionEntry.dart';
 import 'package:pirate_plus/pages/emotionQuestion.dart';
@@ -22,7 +26,7 @@ Future<void> main() async {
       '/': (context) => basic(),
       '/login': (context) => login(),
       '/account': (context) => AccountViewer(),
-      '/report/reports': (context) => results(),
+      '/report/reports': (context) => allReportList(),
       '/report/emotionEntry': (context) => emotionSelect(),
       '/report/emotionQuestion': (context) => Question(),
       '/report/reportPicture': (context) => reportPicture(),
@@ -50,12 +54,19 @@ class _basicState extends State<basic> {
 
   Map RandReport = {};
 
+  Image? reportPic;
+
   @override
   void initState() {
     super.initState();
-    getReport();
     widget.curSession?.curReport?.date = DateTime.now();
-    setCameras();
+    getInfo();
+  }
+
+  Future<void> getInfo() async {
+    await getReport();
+    await setQuote();
+    await setCameras();
   }
 
   Future<void> setCameras() async {
@@ -169,17 +180,67 @@ class _basicState extends State<basic> {
                       color: Colors.cyan.shade700,
                     ),
                   ),
-                  child: RandReport.isEmpty
-                      ? CircularProgressIndicator()
-                      : Column(
+                  child: RandReport.isEmpty ?
+                      SizedBox(
+                          width: 10,
+                          height: 10,
+                          child: CircularProgressIndicator()
+                      )
+                      :
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text("Report Date: ${RandReport['date']}")
+                            Expanded(
+                                flex: 1,
+                                child: Text("Report Date: ${RandReport['date']}")
+                            ),
+
+                            Expanded(
+                                flex: 8,
+                                child: RandReport['picture'] == null?
+                                Text("Here's an image!")
+                                    :
+                                QuoteSelection[0] == null?
+                                Text("Loading...")
+                                    :
+                                Text(
+                                    "\"${QuoteSelection[0]}\"\n${QuoteSelection[1]}"
+                                ),
+                            ),
+
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                  "You were feeling: ${RandReport['emotion']}"
+                              ),
+                            )
                           ],
                         ),
                 ),
               ),
               SizedBox(
                 height: 50,
+              ),
+              Expanded(
+                flex: 2,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                      return allReportList(
+                        curSession: widget.curSession,
+                      );
+                    }));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.cyan[700],
+                  ),
+                  child: Text(
+                    'See your reports',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
               Expanded(
                 flex: 2,

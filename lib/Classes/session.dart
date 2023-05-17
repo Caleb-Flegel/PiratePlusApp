@@ -137,17 +137,57 @@ class Session {
 
   Future<Map> getHomeReport() {
     return db!.getConnection().then((conn) async {
-      var sql = "select emotion, date_format(`date`, '%d-%M-%y'), photo from mhreports ";
-      sql +=
-          "where emotion = 'Happy' or emotion = 'Excited' or emotion = 'Relaxed' or emotion = 'Neutral' ";
+      var sql = "select emotion, date_format(`date`, '%d %M %y'), photo from mhreports ";
+      sql += "where userUid = ? and (emotion = 'Happy' or emotion = 'Excited' or emotion = 'Relaxed' or emotion = 'Neutral') ";
       sql += "order by rand()";
 
-      return await conn.query(sql).then((result) async {
+      return await conn.query(sql, [userID]).then((result) async {
         return {
           'emotion': result.first[0],
           'date': result.first[1],
           'picture': result.first[2]
         };
+      });
+    });
+  }
+
+  Future<Map> getDetailedReport(int reportId) {
+    return db!.getConnection().then((conn) async {
+      var sql = "select emotion, question, answer, response, date_format(`date`, '%d %M %y'), photo from mhreports ";
+      sql += "where userUid = ? and uid = ?";
+
+      return await conn.query(sql, [userID, reportId]).then((result) async {
+        return {
+          'emotion': result.first[0],
+          'question': result.first[1],
+          'answer': result.first[2],
+          'response': result.first[3],
+          'date': result.first[4],
+          'picture': result.first[5]
+        };
+      });
+    });
+  }
+
+  Future<List<Map>> getAllReports () async {
+    return db!.getConnection().then((conn) async {
+      var sql = "select uid, emotion, date_format(`date`, '%d %M %y'), answer ";
+      sql += "from mhreports where userUid = ? ";
+      sql += "order by `date` desc";
+
+      return await conn.query(sql, [userID]).then((result) async {
+        List<Map> reports = [];
+
+        for (int i = 0; i < result.length; i++) {
+          reports.add({
+            'uid': result.elementAt(i)[0],
+            'emotion': result.elementAt(i)[1],
+            'date': result.elementAt(i)[2],
+            'answer': result.elementAt(i)[3],
+          });
+        }
+
+        return reports;
       });
     });
   }
