@@ -48,10 +48,12 @@ class _basicState extends State<basic> {
 
   List QuoteSelection = ["null", "null"];
 
+  Map RandReport = {};
+
   @override
   void initState() {
     super.initState();
-    setQuote();
+    getReport();
     widget.curSession?.curReport?.date = DateTime.now();
     setCameras();
   }
@@ -74,6 +76,16 @@ class _basicState extends State<basic> {
       print("gotQuote");
       setState(() {
         QuoteSelection = quote;
+      });
+    });
+  }
+
+  Future<void> getReport() async {
+    widget.curSession?.getHomeReport().then((report) {
+      print("Home report:");
+      print(report);
+      setState(() {
+        RandReport = report;
       });
     });
   }
@@ -157,18 +169,13 @@ class _basicState extends State<basic> {
                       color: Colors.cyan.shade700,
                     ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      QuoteSelection[0] == "null"
-                          ? CircularProgressIndicator()
-                          : Text(
-                              "${QuoteSelection[0]}\n~${QuoteSelection[1]}",
-                              style: TextStyle(),
-                              textAlign: TextAlign.center,
-                            ),
-                    ],
-                  ),
+                  child: RandReport.isEmpty
+                      ? CircularProgressIndicator()
+                      : Column(
+                          children: [
+                            Text("Report Date: ${RandReport['date']}")
+                          ],
+                        ),
                 ),
               ),
               SizedBox(
