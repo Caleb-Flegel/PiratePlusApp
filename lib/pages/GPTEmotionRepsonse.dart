@@ -1,6 +1,7 @@
 //File will handle the chatGPT emotion reponse
 import 'package:flutter/material.dart';
 import 'package:pirate_plus/Classes/session.dart';
+import 'package:pirate_plus/main.dart';
 import '../Classes/report.dart';
 import '../Classes/GPT.dart';
 import 'Account.dart';
@@ -153,7 +154,13 @@ class _gptResponseState extends State<gptResponse> {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.redAccent[400]),
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/');
+                          Navigator.pushReplacement<void, void>(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) => basic(
+                                curSession: widget.curSession,
+                              ),
+                            ));
                       },
                       child: Text('Go Home',
                           style: TextStyle(fontWeight: FontWeight.bold)),

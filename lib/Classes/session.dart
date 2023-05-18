@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
+import 'package:mysql1/mysql1.dart';
 import 'package:pirate_plus/pages/results.dart';
 
 import 'report.dart';
@@ -110,9 +114,13 @@ class Session {
     }
 
     return db!.getConnection().then((conn) {
-      var sql = "update users set ? = ? where uid = ?";
+      print("vars: ${infoType}, ${info}, ${userID}");
+      var sql = "update users set ? = ? ";
+      sql += "where uid = ?";
+      print(sql);
 
       return conn.query(sql, [infoType, info, userID]).then((result) {
+
         return 0;
       });
     });
@@ -142,10 +150,16 @@ class Session {
       sql += "order by rand()";
 
       return await conn.query(sql, [userID]).then((result) async {
+        Blob? img;
+
+        if(result.first[2] != null) {
+         img = result.first[2];
+        }
+
         return {
           'emotion': result.first[0],
           'date': result.first[1],
-          'picture': result.first[2]
+          'picture': img?.toBytes()
         };
       });
     });
@@ -157,13 +171,19 @@ class Session {
       sql += "where userUid = ? and uid = ?";
 
       return await conn.query(sql, [userID, reportId]).then((result) async {
+        Blob? img;
+
+        if(result.first[5] != null) {
+          img = result.first[5];
+        }
+
         return {
           'emotion': result.first[0],
           'question': result.first[1],
           'answer': result.first[2],
           'response': result.first[3],
           'date': result.first[4],
-          'picture': result.first[5]
+          'picture': img?.toBytes()
         };
       });
     });

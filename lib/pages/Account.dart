@@ -80,176 +80,202 @@ class _AccountViewerState extends State<AccountViewer> {
                     children: [
                       Text("Here is some info about yourself"),
 
-                      Text('First Name: ${accountInfo['fname']}'),
-                      fnameChange == false?
-                          ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  fnameChange = true;
-                                });
-                              },
-                              child: Text("Edit First Name")
-                          )
-                          :
-                          Row(
-                            children: [
-                              TextField(
-                                controller: fname,
-                                maxLines: 1,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText: 'new first name...',
-                               ),
-                              ),
+                      Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [Text('First Name: ${accountInfo['fname']}'),
+                            fnameChange == false?
+                            ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    fnameChange = true;
+                                  });
+                                },
+                                child: Text("Edit First Name")
+                            )
+                                :
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Column(
+                                children: [
+                                  TextField(
+                                    controller: fname,
+                                    maxLines: 1,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      hintText: 'new first name...',
+                                    ),
+                                  ),
 
-                              ElevatedButton(
-                                  onPressed: () async {
-                                      int? track = await widget.curSession?.setAccountInfo("fname", fname.text);
+                                  ElevatedButton(
+                                      onPressed: () async {
+                                        int? track = await widget.curSession?.setAccountInfo("fname", fname.text);
+
+                                        if (track == 0) {
+                                          Map newinfo = (await widget.curSession?.getAccountInfo())!;
+
+                                          setState(() {
+                                            fnameChange = false;
+                                            accountInfo = newinfo;
+                                          });
+                                        }
+                                      },
+                                      child: Text("Submit")
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text('Last Name: ${accountInfo['lname']}'),
+                            lnameChange == false?
+                            ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    lnameChange = true;
+                                  });
+                                },
+                                child: Text("Edit Last Name")
+                            )
+                                :
+                            Column(
+                              children: [
+                                TextField(
+                                  controller: lname,
+                                  maxLines: 1,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    hintText: 'new last name...',
+                                  ),
+                                ),
+
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      int? track = await widget.curSession?.setAccountInfo("lname", lname.text);
 
                                       if (track == 0) {
                                         Map newinfo = (await widget.curSession?.getAccountInfo())!;
 
                                         setState(() {
-                                          fnameChange = false;
+                                          lnameChange = false;
                                           accountInfo = newinfo;
                                         });
-                                    }
-                                  },
-                                  child: Text("Submit")
+                                      }
+                                    },
+                                    child: Text("Submit")
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text('Email: ${accountInfo['email']}'),
+                            emailChange == false?
+                            ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    emailChange = true;
+                                  });
+                                },
+                                child: Text("Edit Email")
+                            )
+                                :
+                            Column(
+                              children: [
+                                TextField(
+                                  controller: email,
+                                  maxLines: 1,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    hintText: 'new email...',
+                                  ),
+                                ),
+
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      int? track = await widget.curSession?.setAccountInfo("email", email.text);
+
+                                      if (track == 0) {
+                                        Map newinfo = (await widget.curSession?.getAccountInfo())!;
+
+                                        setState(() {
+                                          emailChange = false;
+                                          accountInfo = newinfo;
+                                        });
+                                      }
+                                    },
+                                    child: Text("Submit")
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        child: passChange == false?
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                passChange = true;
+                              });
+                            },
+                            child: Text("Edit Password")
+                          )
+                            :
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            TextField(
+                              controller: oldPass,
+                              maxLines: 1,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: 'enter old password...',
                               ),
-                            ],
-                          ),
-
-                      Text('Last Name: ${accountInfo['lname']}'),
-                      lnameChange == false?
-                      ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              lnameChange = true;
-                            });
-                          },
-                          child: Text("Edit Last Name")
-                      )
-                          :
-                      Row(
-                        children: [
-                          TextField(
-                            controller: lname,
-                            maxLines: 1,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'new last name...',
                             ),
-                          ),
 
-                          ElevatedButton(
-                              onPressed: () async {
-                                int? track = await widget.curSession?.setAccountInfo("lname", lname.text);
-
-                                if (track == 0) {
-                                  Map newinfo = (await widget.curSession?.getAccountInfo())!;
-
-                                  setState(() {
-                                    lnameChange = false;
-                                    accountInfo = newinfo;
-                                  });
-                                }
-                              },
-                              child: Text("Submit")
-                          ),
-                        ],
-                      ),
-
-                      Text('Email: ${accountInfo['email']}'),
-                      emailChange == false?
-                      ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              emailChange = true;
-                            });
-                          },
-                          child: Text("Edit Email")
-                      )
-                          :
-                      Row(
-                        children: [
-                          TextField(
-                            controller: email,
-                            maxLines: 1,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'new email...',
+                            TextField(
+                              controller: newPass,
+                              maxLines: 1,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: 'enter new password...',
+                              ),
                             ),
-                          ),
 
-                          ElevatedButton(
-                              onPressed: () async {
-                                int? track = await widget.curSession?.setAccountInfo("email", email.text);
+                            ElevatedButton(
+                                onPressed: () async {
+                                  bool? oldPassCheck = await widget.curSession?.checkPassword(oldPass.text);
+                                  if (oldPassCheck!) {
 
-                                if (track == 0) {
-                                  Map newinfo = (await widget.curSession?.getAccountInfo())!;
+                                    int? track = await widget.curSession?.setAccountInfo("password", newPass.text);
 
-                                  setState(() {
-                                    emailChange = false;
-                                    accountInfo = newinfo;
-                                  });
-                                }
-                              },
-                              child: Text("Submit")
-                          ),
-                        ],
-                      ),
+                                    if (track == 0) {
+                                      Map newinfo = (await widget.curSession?.getAccountInfo())!;
 
-                      fnameChange == false?
-                      ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              fnameChange = true;
-                            });
-                          },
-                          child: Text("Edit Password")
-                      )
-                          :
-                      Row(
-                        children: [
-                          TextField(
-                            controller: oldPass,
-                            maxLines: 1,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'enter old password...',
-                            ),
-                          ),
-
-                          TextField(
-                            controller: newPass,
-                            maxLines: 1,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'enter new password...',
-                            ),
-                          ),
-
-                          ElevatedButton(
-                              onPressed: () async {
-                                bool? oldPassCheck = await widget.curSession?.checkPassword(oldPass.text);
-                                if (oldPassCheck!) {
-
-                                  int? track = await widget.curSession?.setAccountInfo("password", newPass.text);
-
-                                  if (track == 0) {
-                                    Map newinfo = (await widget.curSession?.getAccountInfo())!;
-
-                                    setState(() {
-                                      passChange = false;
-                                      accountInfo = newinfo;
-                                    });
+                                      setState(() {
+                                        passChange = false;
+                                        accountInfo = newinfo;
+                                      });
+                                    }
                                   }
-                                }
-                              },
-                              child: Text("Submit")
-                          ),
-                        ],
+                                },
+                                child: Text("Submit")
+                            ),
+                          ],
+                        ),
                       ),
                   ],
         ),

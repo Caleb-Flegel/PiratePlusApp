@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:pirate_plus/Classes/session.dart';
 import 'package:pirate_plus/pages/Account.dart';
@@ -106,7 +108,7 @@ class _allReportListState extends State<allReportList> {
                             );
                           },
                           title: Text("You felt ${reports?.elementAt(index)['emotion']} on ${reports?.elementAt(index)['date']}"),
-                          subtitle: Text("Answered question: ${reports?.elementAt(index)['answer'] == null? "yes" : "no"}"),
+                          subtitle: Text("Answered question: ${reports?.elementAt(index)['answer'] != null? "yes" : "no"}"),
                           shape: RoundedRectangleBorder(
                             side: BorderSide(color: Colors.cyan.shade700, width: 1),
                             borderRadius: BorderRadius.circular(3)
@@ -198,57 +200,59 @@ class _indReportState extends State<indReport> {
 
       body: Padding(
         padding: EdgeInsets.all(30.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text("Your report:"),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Your report:"),
 
-            report == {}?
-                Text("Loading...")
-                :
-                SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Report submitted on ${report?['date']}"),
+              report == {}?
+                  Text("Loading...")
+                  :
+                  SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Report submitted on ${report?['date']}"),
 
-                      Text('You were feeling ${report?['emotion']}'),
+                        Text('You were feeling ${report?['emotion']}'),
 
-                      report?['answer'] == null?
-                          Text("You didn't answer the question: ${report?['question']}")
+                        report?['answer'] == null?
+                            Text("You didn't answer the question: ${report?['question']}")
+                            :
+                            Column(
+                              children: [
+                                Text("Question aksed: ${report?['question']}"),
+                                Text("You answered: ${report?['answer']}"),
+                                report?['repsone'] == null?
+                                Text("ChatGPT didn't repsond")
+                                    :
+                                Text("ChatGPT gave you this advice: ${report?['response']}")
+                              ],
+                          ),
+
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          border: Border.all(
+                            width: 2,
+                            color: Colors.cyan.shade700,
+                          ),
+                        ),
+                        child: report?['picture'] == null?
+                          Text("You didn't take a picture")
                           :
-                          Column(
-                            children: [
-                              Text("Question aksed: ${report?['question']}"),
-                              Text("You answered: ${report?['answer']}"),
-                              report?['repsone'] == null?
-                              Text("ChatGPT didn't repsond")
-                                  :
-                              Text("ChatGPT gave you this advice: ${report?['response']}")
-                            ],
-                        ),
-
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2),
-                        border: Border.all(
-                          width: 2,
-                          color: Colors.cyan.shade700,
-                        ),
+                        Image.memory(Uint8List.fromList(report?['picture'])),
                       ),
-                      child: report?['picture'] == null?
-                        Text("You didn't take a picture")
-                        :
-                        Text("This is a picture"),
+                      ],
                     ),
-                    ],
-                  ),
-                )
-          ],
+                  )
+            ],
+          ),
         ),
       ),
     );

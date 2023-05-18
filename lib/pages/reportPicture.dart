@@ -1,4 +1,5 @@
 import "dart:io";
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:path/path.dart';
@@ -162,8 +163,10 @@ class _reportPictureState extends State<reportPicture> {
                             await _initializeControllerFuture;
                             final image = await _controller.takePicture();
 
+                            var imgBin = await image.readAsBytes();
+
                             if (!mounted) return;
-                            widget.curSession?.curReport?.picture = image;
+                            widget.curSession?.curReport?.picture = imgBin;
 
                             // If the picture was taken, display it on a new screen.
                             await Navigator.of(context).push(
@@ -171,8 +174,8 @@ class _reportPictureState extends State<reportPicture> {
                                 builder: (context) => DisplayPictureScreen(
                                   // Pass the automatically generated path to
                                   // the DisplayPictureScreen widget.
-                                  image: image,
                                   curSession: widget.curSession,
+                                  imgBin: imgBin,
                                 ),
                               ),
                             );
@@ -220,10 +223,10 @@ class _reportPictureState extends State<reportPicture> {
 
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatelessWidget {
-  const DisplayPictureScreen({super.key, required this.image, this.curSession});
+  const DisplayPictureScreen({super.key, this.imgBin, required this.curSession});
 
-  final XFile image;
   final Session? curSession;
+  final Uint8List? imgBin;
 
   @override
   Widget build(BuildContext context) {
@@ -277,8 +280,7 @@ class DisplayPictureScreen extends StatelessWidget {
                   child: Transform(
                     alignment: Alignment.center,
                     transform: Matrix4.rotationY(pi),
-                    child: Image.file(
-                      File(image.path),
+                    child: Image.memory(imgBin!,
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
                     ),

@@ -54,8 +54,6 @@ class _basicState extends State<basic> {
 
   Map RandReport = {};
 
-  Image? reportPic;
-
   @override
   void initState() {
     super.initState();
@@ -92,7 +90,7 @@ class _basicState extends State<basic> {
   }
 
   Future<void> getReport() async {
-    widget.curSession?.getHomeReport().then((report) {
+    widget.curSession?.getHomeReport().then((report) async {
       print("Home report:");
       print(report);
       setState(() {
@@ -181,10 +179,10 @@ class _basicState extends State<basic> {
                     ),
                   ),
                   child: RandReport.isEmpty ?
-                      SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: CircularProgressIndicator()
+                      Container(
+                            width: 10,
+                            height: 10,
+                            child: CircularProgressIndicator()
                       )
                       :
                       Column(
@@ -197,8 +195,8 @@ class _basicState extends State<basic> {
 
                             Expanded(
                                 flex: 8,
-                                child: RandReport['picture'] == null?
-                                Text("Here's an image!")
+                                child: RandReport['picture'] != null?
+                                Image.memory(Uint8List.fromList(RandReport['picture']))
                                     :
                                 QuoteSelection[0] == null?
                                 Text("Loading...")
@@ -242,6 +240,7 @@ class _basicState extends State<basic> {
                   ),
                 ),
               ),
+              SizedBox(height:12),
               Expanded(
                 flex: 2,
                 child: ElevatedButton(

@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pirate_plus/pages/reportPicture.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,7 +12,7 @@ class report {
   String? answer;
   String? response;
   DateTime? date;
-  XFile? picture;
+  Uint8List? picture;
 
   copyReport(report old) {
     emotion = old.emotion;
@@ -45,14 +46,12 @@ class report {
   Future<String> submitReport(mySql? db, int? userid) async {
     print("test");
     //get db connection
-    picture?.path != null? print("good + ${picture?.path}") : print("bad path");
-
     await db?.getConnection().then((conn) {
       var sql =
           "INSERT INTO mhreports (`emotion`, `question`, `answer`, `response`, `userUid`, `date`, `photo`) ";
-      sql += "VALUES (?, ?, ?, ?, ?, STR_TO_DATE(?, '%m/%d/%Y'), LOAD_FILE(?))"; //Create SQL statement
+      sql += "VALUES (?, ?, ?, ?, ?, STR_TO_DATE(?, '%m/%d/%Y'), ?)"; //Create SQL statement
 
-      conn.query(sql, [emotion, question, answer, response, userid, "${date?.month.toString()}/${date?.day.toString()}/${date?.year.toString()}", picture?.path]).then(
+      conn.query(sql, [emotion, question, answer, response, userid, "${date?.month.toString()}/${date?.day.toString()}/${date?.year.toString()}", picture]).then(
           (result) {
               return "Report:\nEmotion: ${result.first[0]}\nQuestion: ${result.first[1]}\nResponse: ${result.first[2]}";
       });
