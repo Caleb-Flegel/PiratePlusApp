@@ -111,7 +111,7 @@ class _basicState extends State<basic> {
             Icons.menu,
           ),
         ),
-        title: Text("Pirate Plus"),
+        title: Text("Nexus"),
         centerTitle: true,
         flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -179,7 +179,7 @@ class _basicState extends State<basic> {
                     ),
                   ),
                   child: RandReport.isEmpty ?
-                      Container(
+                      SizedBox(
                             width: 10,
                             height: 10,
                             child: CircularProgressIndicator()
@@ -190,26 +190,58 @@ class _basicState extends State<basic> {
                           children: [
                             Expanded(
                                 flex: 1,
-                                child: Text("Report Date: ${RandReport['date']}")
+                                child: Text(
+                                  "Report Date: ${RandReport['date']}",
+                                  style: TextStyle(
+                                      fontSize: 20
+                                  ),
+                                )
                             ),
 
                             Expanded(
                                 flex: 8,
                                 child: RandReport['picture'] != null?
-                                Image.memory(Uint8List.fromList(RandReport['picture']))
+                                Image.memory(
+                                    Uint8List.fromList(RandReport['picture']),
+                                    width: MediaQuery.of(context).size.width,
+                                    fit: BoxFit.fitHeight,
+                                )
                                     :
                                 QuoteSelection[0] == null?
-                                Text("Loading...")
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(),
+                                    Text(
+                                        "Loading...",
+                                      style: TextStyle(
+                                          fontSize: 30
+                                      ),
+                                    ),
+                                  ],
+                                )
                                     :
-                                Text(
-                                    "\"${QuoteSelection[0]}\"\n${QuoteSelection[1]}"
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "\"${QuoteSelection[0]}\"\n${QuoteSelection[1]}",
+                                      style: TextStyle(
+                                        fontSize: 25
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
                                 ),
                             ),
 
                             Expanded(
                               flex: 1,
                               child: Text(
-                                  "You were feeling: ${RandReport['emotion']}"
+                                "You were feeling: ${RandReport['emotion']}",
+                                style: TextStyle(
+                                    fontSize: 20
+                                ),
                               ),
                             )
                           ],

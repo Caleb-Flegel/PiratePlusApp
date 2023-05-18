@@ -46,7 +46,7 @@ class _QuestionState extends State<Question> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Pirate Plus"),
+            Text("Nexus"),
           ],
         ),
         centerTitle: true,

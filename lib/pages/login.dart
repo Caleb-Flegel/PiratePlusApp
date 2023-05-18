@@ -182,7 +182,7 @@ class _signUpState extends State<signUp> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Sign up for Pirate Plus",
+              Text("Sign up for Nexus",
                 style: TextStyle(
                   fontSize: 30,
                   color: Colors.white,

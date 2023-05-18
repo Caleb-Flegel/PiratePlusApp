@@ -44,7 +44,7 @@ class _emotionSelectState extends State<emotionSelect> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pirate Plus"),
+        title: Text("Nexus"),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(

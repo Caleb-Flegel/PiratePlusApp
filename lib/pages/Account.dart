@@ -49,7 +49,7 @@ class _AccountViewerState extends State<AccountViewer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pirate Plus"),
+        title: Text("Nexus"),
         centerTitle: true,
         flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -91,6 +91,9 @@ class _AccountViewerState extends State<AccountViewer> {
                                     fnameChange = true;
                                   });
                                 },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.cyan[700],
+                                ),
                                 child: Text("Edit First Name")
                             )
                                 :
@@ -120,6 +123,9 @@ class _AccountViewerState extends State<AccountViewer> {
                                           });
                                         }
                                       },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.cyan[700],
+                                      ),
                                       child: Text("Submit")
                                   ),
                                 ],
@@ -141,6 +147,9 @@ class _AccountViewerState extends State<AccountViewer> {
                                     lnameChange = true;
                                   });
                                 },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.cyan[700],
+                                ),
                                 child: Text("Edit Last Name")
                             )
                                 :
@@ -168,6 +177,9 @@ class _AccountViewerState extends State<AccountViewer> {
                                         });
                                       }
                                     },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.cyan[700],
+                                    ),
                                     child: Text("Submit")
                                 ),
                               ],
@@ -188,6 +200,9 @@ class _AccountViewerState extends State<AccountViewer> {
                                     emailChange = true;
                                   });
                                 },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.cyan[700],
+                                ),
                                 child: Text("Edit Email")
                             )
                                 :
@@ -215,6 +230,9 @@ class _AccountViewerState extends State<AccountViewer> {
                                         });
                                       }
                                     },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.cyan[700],
+                                    ),
                                     child: Text("Submit")
                                 ),
                               ],
@@ -231,6 +249,9 @@ class _AccountViewerState extends State<AccountViewer> {
                                 passChange = true;
                               });
                             },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.cyan[700],
+                            ),
                             child: Text("Edit Password")
                           )
                             :
@@ -272,6 +293,9 @@ class _AccountViewerState extends State<AccountViewer> {
                                     }
                                   }
                                 },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.cyan[700],
+                                ),
                                 child: Text("Submit")
                             ),
                           ],

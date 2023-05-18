@@ -57,7 +57,7 @@ class _reportPictureState extends State<reportPicture> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pirate Plus"),
+        title: Text("Nexus"),
         centerTitle: true,
         flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -232,7 +232,7 @@ class DisplayPictureScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pirate Plus"),
+        title: Text("Nexus"),
         centerTitle: true,
         flexibleSpace: Container(
             decoration: BoxDecoration(

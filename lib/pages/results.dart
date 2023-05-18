@@ -37,7 +37,7 @@ class _allReportListState extends State<allReportList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pirate Plus"),
+        title: Text("Nexus"),
         centerTitle: true,
         flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -157,7 +157,7 @@ class _indReportState extends State<indReport> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Pirate Plus"),
+            Text("Nexus"),
           ],
         ),
         centerTitle: true,
@@ -317,6 +317,7 @@ class _indReportState extends State<indReport> {
           ),
         ),
       ),
+      )
     );
   }
 }

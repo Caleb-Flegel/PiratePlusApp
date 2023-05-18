@@ -46,7 +46,7 @@ class _gptResponseState extends State<gptResponse> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pirate Plus"),
+        title: Text("Nexus"),
         centerTitle: true,
         flexibleSpace: Container(
             decoration: BoxDecoration(
