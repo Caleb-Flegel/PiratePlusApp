@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:pirate_plus/Classes/session.dart';
 import 'package:pirate_plus/pages/Account.dart';
@@ -200,38 +199,101 @@ class _indReportState extends State<indReport> {
 
       body: Padding(
         padding: EdgeInsets.all(30.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Your report:"),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text("Your Report:",
+                  style: TextStyle(
+                    fontSize: 35.0
+                  )
+                ),
 
-              report == {}?
-                  Text("Loading...")
-                  :
-                  SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Report submitted on ${report?['date']}"),
+                SizedBox(
+                  height: 30.0,),
 
-                        Text('You were feeling ${report?['emotion']}'),
+                report == {}?
+                    Text("Loading...")
+                    :
+                    SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Report submitted on ${report?['date']}",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                            )
+                            ),
 
-                        report?['answer'] == null?
-                            Text("You didn't answer the question: ${report?['question']}")
-                            :
-                            Column(
-                              children: [
-                                Text("Question aksed: ${report?['question']}"),
-                                Text("You answered: ${report?['answer']}"),
-                                report?['repsone'] == null?
-                                Text("ChatGPT didn't repsond")
-                                    :
-                                Text("ChatGPT gave you this advice: ${report?['response']}")
-                              ],
-                          ),
+                          SizedBox(
+                            height: 10.0,),
+
+                          Text('You were feeling ${report?['emotion']}',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                            )
+                            ),
+
+                          SizedBox(
+                            height: 10.0,),
+
+                          report?['answer'] == null?
+                              Text("You didn't answer the question: ${report?['question']}",
+                                textAlign: TextAlign.center,
+                                )
+
+                              :
+                              Column(
+                                children: [
+                                  Text("Question aksed: ${report?['question']}",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: 18.0
+                                    ),
+                                  ),
+
+                                  SizedBox(
+                                    height: 10.0
+                                  ),
+
+                                  Text("You answered: ${report?['answer']}",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: 18.0
+                                    )
+                                  ),
+
+
+                                    SizedBox(
+                                      height: 15.0,),
+
+                                  report?['repsone'] == null?
+                                  Text("ChatGPT didn't repsond",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                    )
+                                  )
+                                      :
+                                  Text("ChatGPT gave you this advice: ${report?['response']}",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                    )
+                                  ),
+                                ],
+                            ),
+
+                          SizedBox(
+                            height: 10.0,),
 
                       Container(
                         width: MediaQuery.of(context).size.width,

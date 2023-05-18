@@ -24,104 +24,123 @@ class _loginState extends State<login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(30.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text("Hello there!"),
-            Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+              Color.fromARGB(255, 106, 229, 198),
+              Colors.cyan.shade700
+            ])),
+        child: Padding(
+          padding: EdgeInsets.all(30.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text("Hello there!",
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+              ),
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    (status == null) ? SizedBox(height: 0) : Text(status!),
+                    TextField(
+                      controller: username,
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'email',
+                         filled: true, //<-- SEE HERE
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                    TextField(
+                      controller: password,
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'password',
+                        filled: true, //<-- SEE HERE
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  (status == null) ? SizedBox(height: 0) : Text(status!),
-                  TextField(
-                    controller: username,
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'email',
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                    ),
+                    onPressed: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => signUp(
+                            newSession: newSession,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
                     ),
                   ),
-                  TextField(
-                    controller: password,
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'password',
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                    ),
+                    onPressed: () async {
+                      if (username.text.isNotEmpty && password.text.isNotEmpty) {
+                        print("try login");
+                        newSession.userID = (await newSession.loginAttempt(
+                            username.text, password.text));
+      
+                        if (newSession.userID == -1) {
+                          print("login error");
+                          setState(() {
+                            status = "Incorrect email or password";
+                          });
+                        } else {
+                          print("login success");
+      
+                          await newSession.setup().then((value) {
+                            //Go home
+                            Navigator.pushReplacement<void, void>(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext context) => basic(
+                                  curSession: newSession,
+                                ),
+                              ),
+                            );
+                          });
+                        }
+                      } else {
+                        setState(() {
+                          status = "Enter an email and password!";
+                        });
+                      }
+                    },
+                    child: Text(
+                      "Login",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
                     ),
                   ),
                 ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                  ),
-                  onPressed: () async {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => signUp(
-                          newSession: newSession,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black),
-                  ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                  ),
-                  onPressed: () async {
-                    if (username.text.isNotEmpty && password.text.isNotEmpty) {
-                      print("try login");
-                      newSession.userID = (await newSession.loginAttempt(
-                          username.text, password.text));
-
-                      if (newSession.userID == -1) {
-                        print("login error");
-                        setState(() {
-                          status = "Incorrect email or password";
-                        });
-                      } else {
-                        print("login success");
-
-                        await newSession.setup().then((value) {
-                          //Go home
-                          Navigator.pushReplacement<void, void>(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (BuildContext context) => basic(
-                              curSession: newSession,
-                              ),
-                            ),
-                          );
-                        });
-                      }
-                    } else {
-                      setState(() {
-                        status = "Enter an email and password!";
-                      });
-                    }
-                  },
-                  child: Text(
-                    "Login",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black),
-                  ),
-                ),
-              ],
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -148,114 +167,136 @@ class _signUpState extends State<signUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(30.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text("Sign up for Pirate Plus"),
-            Column(
-              children: [
-                (status == null) ? SizedBox(height: 0) : Text(status!),
-                TextField(
-                  controller: fName,
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'first name',
-                  ),
+      body: Container(
+        decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+              Color.fromARGB(255, 106, 229, 198),
+              Colors.cyan.shade700
+            ])),
+        child: Padding(
+          padding: EdgeInsets.all(30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Sign up for Pirate Plus",
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
                 ),
-                TextField(
-                  controller: lName,
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'last name',
+              Column(
+                children: [
+                  (status == null) ? SizedBox(height: 0) : Text(status!),
+                  TextField(
+                    controller: fName,
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'first name',
+                      filled: true, //<-- SEE HERE
+                      fillColor: Colors.white,
+                    ),
                   ),
-                ),
-                TextField(
-                  controller: username,
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'email',
+                  TextField(
+                    controller: lName,
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'last name',
+                      filled: true, //<-- SEE HERE
+                      fillColor: Colors.white,
+                    ),
                   ),
-                ),
-                TextField(
-                  controller: password,
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'password',
+                  TextField(
+                    controller: username,
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'email',
+                      filled: true, //<-- SEE HERE
+                      fillColor: Colors.white,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
+                  TextField(
+                    controller: password,
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'password',
+                      filled: true, //<-- SEE HERE
+                      fillColor: Colors.white,
+                    ),
                   ),
-                  onPressed: () async {
-                    Navigator.pushReplacementNamed(context, '/login');
-                  },
-                  child: Text(
-                    "Log in",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                    ),
+                    onPressed: () async {
+                      Navigator.pushReplacementNamed(context, '/login');
+                    },
+                    child: Text(
+                      "Log in",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
                   ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                  ),
-                  onPressed: () async {
-                    if (username.text.isNotEmpty &&
-                        password.text.isNotEmpty &&
-                        fName.text.isNotEmpty &&
-                        lName.text.isNotEmpty) {
-
-                      widget.newSession.userID = (await widget.newSession
-                          .createUser(username.text, password.text, fName.text,
-                              lName.text))!;
-
-                      print(widget.newSession.userID);
-
-                      if (widget.newSession.userID == -1) {
-                        setState(() {
-                          status = "Email or password already used";
-                        });
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                    ),
+                    onPressed: () async {
+                      if (username.text.isNotEmpty &&
+                          password.text.isNotEmpty &&
+                          fName.text.isNotEmpty &&
+                          lName.text.isNotEmpty) {
+                        widget.newSession.userID = (await widget.newSession
+                            .createUser(username.text, password.text, fName.text,
+                                lName.text))!;
+      
+                        print(widget.newSession.userID);
+      
+                        if (widget.newSession.userID == -1) {
+                          setState(() {
+                            status = "Email or password already used";
+                          });
+                        } else {
+                          await widget.newSession.setup().then((value) {
+                            //Go home
+                            Navigator.pushReplacement<void, void>(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder: (BuildContext context) => basic(
+                                    curSession: widget.newSession,
+                                  ),
+                                ));
+                          });
+                        }
                       } else {
-                        await widget.newSession.setup().then((value) {
-                          //Go home
-                          Navigator.pushReplacement<void, void>(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (BuildContext context) => basic(
-                              curSession: widget.newSession,
-                              ),
-                          ));
+                        print("no info");
+                        setState(() {
+                          status = "Enter all information!";
                         });
                       }
-                    } else {
-                      print("no info");
-                      setState(() {
-                        status = "Enter all information!";
-                      });
-                    }
-                  },
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black),
+                    },
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
                   ),
-                ),
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
